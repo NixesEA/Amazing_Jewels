@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:padding="56dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <ImageView
+        android:id="@+id/logo"
+        android:src="@drawable/logo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/play_btn"
+        app:layout_constraintTop_toTopOf="parent"
+        android:paddingTop="80dp"
+        android:paddingBottom="80dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <ImageButton
+        android:id="@+id/play_btn"
+        android:background="@color/transparent"
+        android:src="@drawable/btn_play"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/settings_btn"
+        app:layout_constraintTop_toBottomOf="@id/logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <ImageButton
+        android:id="@+id/settings_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:background="@color/transparent"
+        android:src="@drawable/btn_settings"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/shop_btn"
+        app:layout_constraintStart_toStartOf="@id/play_btn" />
+    <ImageButton
+        android:id="@+id/shop_btn"
+        android:background="@color/transparent"
+        android:src="@drawable/btn_shop"
+        app:layout_constraintTop_toTopOf="@id/settings_btn"
+        app:layout_constraintStart_toEndOf="@id/settings_btn"
+        app:layout_constraintEnd_toStartOf="@id/leaderboard_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <ImageButton
+        android:id="@+id/leaderboard_btn"
+        android:background="@color/transparent"
+        android:src="@drawable/btn_leaders"
+        app:layout_constraintTop_toTopOf="@id/shop_btn"
+        app:layout_constraintStart_toEndOf="@id/shop_btn"
+        app:layout_constraintEnd_toEndOf="@id/play_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+</android.support.constraint.ConstraintLayout>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation"
+    app:startDestination="@id/startFragment">
+
+    <fragment
+        android:id="@+id/startFragment"
+        android:name="ru.pushapp.amazing_jewels.StartFragment"
+        android:label="start_fragment"
+        tools:layout="@layout/start_fragment" >
+        <action
+            android:id="@+id/action_startFragment_to_shopFragment"
+            app:destination="@id/shopFragment" />
+        <action
+            android:id="@+id/action_startFragment_to_leaderBoardFragment"
+            app:destination="@id/leaderBoardFragment" />
+        <action
+            android:id="@+id/action_startFragment_to_pauseFragment"
+            app:destination="@id/pauseFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/shopFragment"
+        android:name="ru.pushapp.amazing_jewels.ShopFragment"
+        android:label="shop_fragment"
+        tools:layout="@layout/shop_fragment" />
+    <fragment
+        android:id="@+id/leaderBoardFragment"
+        android:name="ru.pushapp.amazing_jewels.LeaderBoardFragment"
+        android:label="leader_bord_fragment"
+        tools:layout="@layout/leader_bord_fragment" />
+    <fragment
+        android:id="@+id/pauseFragment"
+        android:name="ru.pushapp.amazing_jewels.PauseFragment"
+        android:label="pause_fragment"
+        tools:layout="@layout/pause_fragment" />
+</navigation>

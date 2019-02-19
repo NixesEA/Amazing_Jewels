@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <ImageView
+        android:id="@+id/shop_bg"
+        android:src="@drawable/shop_card_bg"
+        android:layout_width="match_parent"
+        android:layout_height="84dp"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/shop_heart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/icn_heart_shop"
+        android:layout_marginStart="16dp"
+        app:layout_constraintStart_toStartOf="@id/shop_bg"
+        app:layout_constraintTop_toTopOf="@id/shop_bg"
+        app:layout_constraintBottom_toBottomOf="@id/shop_bg"/>
+
+
+    <TextView
+        android:id="@+id/shop_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="Life"
+        android:textColor="@color/white"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/shop_coin"
+        app:layout_constraintStart_toEndOf="@id/shop_heart"
+        app:layout_constraintTop_toTopOf="@id/shop_heart" />
+
+    <ImageView
+        android:id="@+id/shop_coin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/icn_coin_sm"
+        app:layout_constraintBottom_toBottomOf="@id/shop_heart"
+        app:layout_constraintStart_toStartOf="@id/shop_text"
+        app:layout_constraintTop_toBottomOf="@id/shop_text" />
+
+    <TextView
+        android:id="@+id/shop_text_coast"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="500"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@id/shop_coin"
+        app:layout_constraintTop_toTopOf="@id/shop_coin" />
+
+    <Button
+        android:id="@+id/shop_btn"
+        android:background="@drawable/shop_btn_buy"
+        app:layout_constraintTop_toTopOf="@id/shop_bg"
+        app:layout_constraintBottom_toBottomOf="@id/shop_bg"
+        app:layout_constraintEnd_toEndOf="@id/shop_bg"
+        android:layout_marginEnd="16dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Buy"
+        android:textAllCaps="false"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textColor="@color/white"/>
+
+
+</android.support.constraint.ConstraintLayout>
