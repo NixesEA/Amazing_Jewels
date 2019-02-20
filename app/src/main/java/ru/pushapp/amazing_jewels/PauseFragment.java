@@ -47,7 +47,7 @@ public class PauseFragment extends Fragment implements View.OnClickListener{
         switch (view.getId()){
             case R.id.play_btn:{
                 getActivity().onBackPressed();
-
+                //TODO
                 break;
             }
             case R.id.leaderboard_btn:{

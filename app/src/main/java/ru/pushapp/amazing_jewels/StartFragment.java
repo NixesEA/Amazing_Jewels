@@ -52,8 +52,8 @@ public class StartFragment extends Fragment implements View.OnClickListener{
 //                editor.putInt("life", 2);
 //                editor.apply();
 
-                Navigation.findNavController(view).navigate(R.id.action_startFragment_to_pauseFragment);
-                Toast.makeText(getContext(), "way to game", Toast.LENGTH_SHORT).show();
+//                Navigation.findNavController(view).navigate(R.id.action_startFragment_to_pauseFragment);
+                Navigation.findNavController(view).navigate(R.id.action_startFragment_to_gameFragment);
                 break;
             }
             case R.id.leaderboard_btn:{

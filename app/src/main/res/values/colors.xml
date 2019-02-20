@@ -8,4 +8,12 @@
     <color name="black">#33000000</color>
     <color name="white">#fff</color>
 
+    <color name="light_cell">#303f9f</color>
+    <color name="dark_cell">#283593</color>
+
+    <color name="start_dark_cell">#283593</color>
+    <color name="stop_dark_cell">#001d2771</color>
+
+    <color name="start_light_cell">#303f9f</color>
+    <color name="stop_light_cell">#001c256d</color>
 </resources>

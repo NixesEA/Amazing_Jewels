@@ -17,8 +17,8 @@
             android:id="@+id/action_startFragment_to_leaderBoardFragment"
             app:destination="@id/leaderBoardFragment" />
         <action
-            android:id="@+id/action_startFragment_to_pauseFragment"
-            app:destination="@id/pauseFragment" />
+            android:id="@+id/action_startFragment_to_gameFragment"
+            app:destination="@id/gameFragment" />
     </fragment>
     <fragment
         android:id="@+id/shopFragment"
@@ -35,4 +35,9 @@
         android:name="ru.pushapp.amazing_jewels.PauseFragment"
         android:label="pause_fragment"
         tools:layout="@layout/pause_fragment" />
+    <fragment
+        android:id="@+id/gameFragment"
+        android:name="ru.pushapp.amazing_jewels.GameFragment"
+        android:label="game_fragment"
+        tools:layout="@layout/game_fragment" />
 </navigation>
