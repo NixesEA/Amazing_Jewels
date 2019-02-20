@@ -3,9 +3,7 @@ package ru.pushapp.amazing_jewels;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.LinearGradient;
 import android.graphics.Paint;
-import android.graphics.Shader;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
@@ -13,6 +11,13 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class GameView extends View {
 
@@ -26,8 +31,8 @@ public class GameView extends View {
     int selectedCellX = -1;
     int selectedCellY = -1;
 
-    int x1, nextXPos;
-    int y1, nextYPos;
+    int nextXPos;
+    int nextYPos;
 
     Paint topDarkGrad = new Paint();
     Paint topLightGrad = new Paint();
@@ -41,17 +46,16 @@ public class GameView extends View {
             R.drawable.fruit_5, R.drawable.fruit_6,
             R.drawable.fruit_7, R.drawable.fruit_8};
     Bitmap[] prefab = new Bitmap[8];
-    //    Bitmap[][] gameset;
     GameUnit[][] gameset;
+
+//    HashMap<Integer, String> reward = new HashMap<>();
+    HashSet<Integer> reward = new HashSet<>();
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
 
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN: {
-
-                x1 = (int) (event.getX() / CELL_SIZE);
-                y1 = (int) (event.getY() / CELL_SIZE);
 
                 selectedCellX = (int) (event.getX() / CELL_SIZE);
                 selectedCellY = (int) (event.getY() / CELL_SIZE);
@@ -62,48 +66,53 @@ public class GameView extends View {
                 Bitmap buff;
                 nextXPos = (int) (event.getX() / CELL_SIZE);
                 nextYPos = (int) (event.getY() / CELL_SIZE);
+                reward.clear();
 
                 //if left to right sweep event on screen
-                if (x1 < nextXPos) {
+                if (selectedCellX < nextXPos) {
                     buff = gameset[selectedCellY][selectedCellX + 1].bitmap;
                     gameset[selectedCellY][selectedCellX + 1].bitmap = gameset[selectedCellY][selectedCellX].bitmap;
                     gameset[selectedCellY][selectedCellX].bitmap = buff;
 
                     invalidate();
                     Log.d("TESTtouch", "Left to Right");
+                    check(selectedCellX, selectedCellY, selectedCellX + 1, selectedCellY);
                     break;
                 }
 
                 // if right to left sweep event on screen
-                if (x1 > nextXPos) {
+                if (selectedCellX > nextXPos) {
                     buff = gameset[selectedCellY][selectedCellX - 1].bitmap;
                     gameset[selectedCellY][selectedCellX - 1].bitmap = gameset[selectedCellY][selectedCellX].bitmap;
                     gameset[selectedCellY][selectedCellX].bitmap = buff;
 
                     invalidate();
                     Log.d("TESTtouch", "Right to Left");
+                    check(selectedCellX, selectedCellY, selectedCellX - 1, selectedCellY);
                     break;
                 }
 
                 // if UP to Down sweep event on screen
-                if (y1 < nextYPos) {
+                if (selectedCellY < nextYPos) {
                     buff = gameset[selectedCellY + 1][selectedCellX].bitmap;
                     gameset[selectedCellY + 1][selectedCellX].bitmap = gameset[selectedCellY][selectedCellX].bitmap;
                     gameset[selectedCellY][selectedCellX].bitmap = buff;
 
                     invalidate();
                     Log.d("TESTtouch", "UP to Down");
+                    check(selectedCellX, selectedCellY, selectedCellX, selectedCellY + 1);
                     break;
                 }
 
                 //if Down to UP sweep event on screen
-                if (y1 > nextYPos) {
+                if (selectedCellY > nextYPos) {
                     buff = gameset[selectedCellY - 1][selectedCellX].bitmap;
                     gameset[selectedCellY - 1][selectedCellX].bitmap = gameset[selectedCellY][selectedCellX].bitmap;
                     gameset[selectedCellY][selectedCellX].bitmap = buff;
 
                     invalidate();
                     Log.d("TESTtouch", "Down to UP");
+                    check(selectedCellX, selectedCellY, selectedCellX, selectedCellY - 1);
                     break;
                 }
                 break;
@@ -205,6 +214,110 @@ public class GameView extends View {
             }
         }
 
+    }
+
+    private void check(int firstX, int firstY, int secondX, int secondY) {
+        int count = 1;
+        boolean right = true;
+        boolean left = true;
+        boolean top = true;
+        boolean bottom = true;
+
+        reward.add(secondY * 10 + secondX);
+
+        while (right) {
+            if (secondX + count >= countX) {
+                right = false;
+                continue;
+            }
+
+            if (reward.contains(secondY * 10 + (secondX + count))) {
+                break;
+            }
+            if (gameset[secondY][secondX].bitmap != gameset[secondY][secondX + count].bitmap) {
+                right = false;
+                continue;
+            }
+            check(secondX, secondY, secondX + count, secondY);
+            reward.add(secondY * 10 + (secondX + count));
+            count++;
+        }
+
+        count = 1;
+        while (left) {
+            if (secondX - count <= -1) {
+                left = false;
+                continue;
+            }
+            if (reward.contains(secondY * 10 + (secondX - count))) {
+                break;
+            }
+            if (gameset[secondY][secondX].bitmap != gameset[secondY][secondX - count].bitmap) {
+                left = false;
+                continue;
+            }
+            check(secondX, secondY, secondX - count, secondY);
+            reward.add(secondY * 10 + (secondX - count));
+            count++;
+        }
+
+        count = 1;
+        while (top) {
+            if (secondY - count <= -1) {
+                top = false;
+                continue;
+            }
+            if (reward.contains((secondY - count) * 10 + secondX)) {
+                break;
+            }
+            if (gameset[secondY][secondX].bitmap != gameset[secondY - count][secondX].bitmap) {
+                top = false;
+                continue;
+            }
+            check(secondX, secondY, secondX, secondY - count);
+            reward.add((secondY - count) * 10 + secondX);
+            count++;
+        }
+
+        count = 1;
+        while (bottom) {
+            if (secondY + count >= countY) {
+                bottom = false;
+                continue;
+            }
+            if (reward.contains((secondY + count) * 10 + secondX)) {
+                break;
+            }
+            if (gameset[secondY][secondX].bitmap != gameset[secondY + count][secondX].bitmap) {
+                bottom = false;
+                continue;
+            }
+            check(secondX, secondY, secondX, secondY + count);
+            reward.add((secondY + count) * 10 + secondX);
+            count++;
+        }
+
+//        List sortedList = new ArrayList(reward);
+//        Collections.sort(sortedList);
+        Log.d("TESTbit", "countCell: " + reward.size());
+        Log.d("TESTbit", "countCell: " + reward.toString());
+
+
+        if (reward.size() > 2){
+
+            Log.d("TESTbir", "____________");
+            for (Integer i : reward) {
+                int x = i%10;
+                int y = i/10;
+                gameset[y][x].bitmap = ((BitmapDrawable)getResources().getDrawable(R.drawable.icn_coin_sm)).getBitmap();
+                Log.d("TESTbir", "x: " + x);
+                Log.d("TESTbir", "y: " + y);
+            }
+        }
+
+        if (gameset[firstY][firstX].bitmap == gameset[secondY][secondX].bitmap) {
+            Log.d("TESTbit", "bit == bit");
+        }
     }
 
     private int[] generateLine(int y) {
