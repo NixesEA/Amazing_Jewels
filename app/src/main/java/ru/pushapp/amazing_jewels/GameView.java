@@ -12,12 +12,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 public class GameView extends View {
 
@@ -76,7 +71,7 @@ public class GameView extends View {
 
                     invalidate();
                     Log.d("TESTtouch", "Left to Right");
-                    check(selectedCellX, selectedCellY, selectedCellX + 1, selectedCellY);
+                    checkCombo(selectedCellX, selectedCellY, selectedCellX + 1, selectedCellY);
                     break;
                 }
 
@@ -88,7 +83,7 @@ public class GameView extends View {
 
                     invalidate();
                     Log.d("TESTtouch", "Right to Left");
-                    check(selectedCellX, selectedCellY, selectedCellX - 1, selectedCellY);
+                    checkCombo(selectedCellX, selectedCellY, selectedCellX - 1, selectedCellY);
                     break;
                 }
 
@@ -100,7 +95,7 @@ public class GameView extends View {
 
                     invalidate();
                     Log.d("TESTtouch", "UP to Down");
-                    check(selectedCellX, selectedCellY, selectedCellX, selectedCellY + 1);
+                    checkCombo(selectedCellX, selectedCellY, selectedCellX, selectedCellY + 1);
                     break;
                 }
 
@@ -112,7 +107,7 @@ public class GameView extends View {
 
                     invalidate();
                     Log.d("TESTtouch", "Down to UP");
-                    check(selectedCellX, selectedCellY, selectedCellX, selectedCellY - 1);
+                    checkCombo(selectedCellX, selectedCellY, selectedCellX, selectedCellY - 1);
                     break;
                 }
                 break;
@@ -216,8 +211,45 @@ public class GameView extends View {
 
     }
 
-    private void check(int firstX, int firstY, int secondX, int secondY) {
-        int count = 1;
+    private void checkCombo(int firstX, int firstY, int secondX, int secondY) {
+        check(secondX,secondY);
+        if (reward.size() > 2) {
+            Log.d("TESTbit", "____________");
+            Log.d("TESTbit", "countCell: " + reward.size());
+            Log.d("TESTbit", "countCell: " + reward.toString());
+            Log.d("TESTreward", "Co-co-combo! +" + ((reward.size() - 1) * 50));
+
+            for (Integer i : reward) {
+                int x = i % 10;
+                int y = i / 10;
+                gameset[y][x].bitmap = ((BitmapDrawable) getResources().getDrawable(R.drawable.icn_coin_sm)).getBitmap();
+            }
+        } else {
+            Log.d("TESTbit", "Комбинаций не найдено");
+        }
+        reward.clear();
+
+
+        check(firstX,firstY);
+        if (reward.size() > 2) {
+            Log.d("TESTbit", "____________");
+            Log.d("TESTbit", "countCell: " + reward.size());
+            Log.d("TESTbit", "countCell: " + reward.toString());
+            Log.d("TESTreward", "Co-co-combo! +" + ((reward.size() - 1) * 50));
+
+            for (Integer i : reward) {
+                int x = i % 10;
+                int y = i / 10;
+                gameset[y][x].bitmap = ((BitmapDrawable) getResources().getDrawable(R.drawable.icn_coin_sm)).getBitmap();
+            }
+
+        } else {
+            Log.d("TESTbit", "Комбинаций не найдено");
+        }
+
+    }
+
+    private void check(int secondX, int secondY){
         boolean right = true;
         boolean left = true;
         boolean top = true;
@@ -225,6 +257,7 @@ public class GameView extends View {
 
         reward.add(secondY * 10 + secondX);
 
+        int count = 1;
         while (right) {
             if (secondX + count >= countX) {
                 right = false;
@@ -238,7 +271,7 @@ public class GameView extends View {
                 right = false;
                 continue;
             }
-            check(secondX, secondY, secondX + count, secondY);
+            check(secondX + count, secondY);
             reward.add(secondY * 10 + (secondX + count));
             count++;
         }
@@ -256,7 +289,7 @@ public class GameView extends View {
                 left = false;
                 continue;
             }
-            check(secondX, secondY, secondX - count, secondY);
+            check(secondX - count,secondY);
             reward.add(secondY * 10 + (secondX - count));
             count++;
         }
@@ -274,7 +307,7 @@ public class GameView extends View {
                 top = false;
                 continue;
             }
-            check(secondX, secondY, secondX, secondY - count);
+            check(secondX,secondY - count);
             reward.add((secondY - count) * 10 + secondX);
             count++;
         }
@@ -292,31 +325,9 @@ public class GameView extends View {
                 bottom = false;
                 continue;
             }
-            check(secondX, secondY, secondX, secondY + count);
+            check(secondX, secondY + count);
             reward.add((secondY + count) * 10 + secondX);
             count++;
-        }
-
-//        List sortedList = new ArrayList(reward);
-//        Collections.sort(sortedList);
-        Log.d("TESTbit", "countCell: " + reward.size());
-        Log.d("TESTbit", "countCell: " + reward.toString());
-
-
-        if (reward.size() > 2){
-
-            Log.d("TESTbir", "____________");
-            for (Integer i : reward) {
-                int x = i%10;
-                int y = i/10;
-                gameset[y][x].bitmap = ((BitmapDrawable)getResources().getDrawable(R.drawable.icn_coin_sm)).getBitmap();
-                Log.d("TESTbir", "x: " + x);
-                Log.d("TESTbir", "y: " + y);
-            }
-        }
-
-        if (gameset[firstY][firstX].bitmap == gameset[secondY][secondX].bitmap) {
-            Log.d("TESTbit", "bit == bit");
         }
     }
 
