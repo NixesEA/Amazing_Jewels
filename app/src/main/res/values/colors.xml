@@ -2,11 +2,13 @@
 <resources>
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorAccent">#D81B60</color>
+    <color name="colorAccent">@color/halfWhite</color>
 
     <color name="transparent">@null</color>
     <color name="black">#33000000</color>
+    <color name="darkBlack">#CC000000</color>
     <color name="white">#fff</color>
+    <color name="halfWhite">#80FFFFFF</color>
 
     <color name="light_cell">#303f9f</color>
     <color name="dark_cell">#283593</color>
@@ -16,4 +18,6 @@
 
     <color name="start_light_cell">#303f9f</color>
     <color name="stop_light_cell">#001c256d</color>
+
+    <color name="light_line">#1FE5E5E5</color>
 </resources>

@@ -15,6 +15,7 @@ import android.view.View;
 import java.util.HashSet;
 
 public class GameView extends View {
+    OnCustomListener mListener;
 
     int countX = 0;
     int countY = 0;
@@ -43,8 +44,14 @@ public class GameView extends View {
     Bitmap[] prefab = new Bitmap[8];
     GameUnit[][] gameset;
 
-//    HashMap<Integer, String> reward = new HashMap<>();
     HashSet<Integer> reward = new HashSet<>();
+
+    boolean horizontalFlag = false;
+    boolean verticalFlag = false;
+
+    public void setCustomListener(OnCustomListener eventListener) {
+        mListener = eventListener;
+    }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -52,70 +59,152 @@ public class GameView extends View {
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN: {
 
+                horizontalFlag = false;
+                verticalFlag = false;
+
                 selectedCellX = (int) (event.getX() / CELL_SIZE);
                 selectedCellY = (int) (event.getY() / CELL_SIZE);
-                Log.d("TESTtouch", "Down");
+                Log.d("GameViewTouchEvent", "Down");
                 break;
             }
-            case MotionEvent.ACTION_UP: {
-                Bitmap buff;
+            case MotionEvent.ACTION_MOVE: {
+
                 nextXPos = (int) (event.getX() / CELL_SIZE);
                 nextYPos = (int) (event.getY() / CELL_SIZE);
-                reward.clear();
 
-                //if left to right sweep event on screen
-                if (selectedCellX < nextXPos) {
-                    buff = gameset[selectedCellY][selectedCellX + 1].bitmap;
-                    gameset[selectedCellY][selectedCellX + 1].bitmap = gameset[selectedCellY][selectedCellX].bitmap;
-                    gameset[selectedCellY][selectedCellX].bitmap = buff;
-
-                    invalidate();
-                    Log.d("TESTtouch", "Left to Right");
-                    checkCombo(selectedCellX, selectedCellY, selectedCellX + 1, selectedCellY);
-                    break;
+                if (!(horizontalFlag && verticalFlag)) {
+                    if (selectedCellX + 2 > nextXPos && selectedCellX - 2 < nextXPos) {
+                        horizontalFlag = true;
+                        break;
+                    } else {
+                        horizontalFlag = false;
+                        //todo return to previously place
+                    }
+                    if (selectedCellY + 2 > nextYPos && selectedCellY - 2 < nextYPos) {
+                        verticalFlag = true;
+                        break;
+                    } else {
+                        verticalFlag = false;
                 }
-
-                // if right to left sweep event on screen
-                if (selectedCellX > nextXPos) {
-                    buff = gameset[selectedCellY][selectedCellX - 1].bitmap;
-                    gameset[selectedCellY][selectedCellX - 1].bitmap = gameset[selectedCellY][selectedCellX].bitmap;
-                    gameset[selectedCellY][selectedCellX].bitmap = buff;
-
-                    invalidate();
-                    Log.d("TESTtouch", "Right to Left");
-                    checkCombo(selectedCellX, selectedCellY, selectedCellX - 1, selectedCellY);
-                    break;
-                }
-
-                // if UP to Down sweep event on screen
-                if (selectedCellY < nextYPos) {
-                    buff = gameset[selectedCellY + 1][selectedCellX].bitmap;
-                    gameset[selectedCellY + 1][selectedCellX].bitmap = gameset[selectedCellY][selectedCellX].bitmap;
-                    gameset[selectedCellY][selectedCellX].bitmap = buff;
-
-                    invalidate();
-                    Log.d("TESTtouch", "UP to Down");
-                    checkCombo(selectedCellX, selectedCellY, selectedCellX, selectedCellY + 1);
-                    break;
-                }
-
-                //if Down to UP sweep event on screen
-                if (selectedCellY > nextYPos) {
-                    buff = gameset[selectedCellY - 1][selectedCellX].bitmap;
-                    gameset[selectedCellY - 1][selectedCellX].bitmap = gameset[selectedCellY][selectedCellX].bitmap;
-                    gameset[selectedCellY][selectedCellX].bitmap = buff;
-
-                    invalidate();
-                    Log.d("TESTtouch", "Down to UP");
-                    checkCombo(selectedCellX, selectedCellY, selectedCellX, selectedCellY - 1);
-                    break;
-                }
-                break;
             }
+
+
         }
 
-        return true;
+/*                reward.clear();
+
+                if (selectedCellX + 2 > nextXPos && selectedCellX - 2 < nextXPos) {
+                    // Left to Right event
+                    if (gameset[selectedCellY][selectedCellX].startX < gameset[selectedCellY][selectedCellX + 1].startX) {
+                        gameset[selectedCellY][selectedCellX].startX = event.getX() - CELL_SIZE/2;
+                    }
+                    invalidate();
+                    Log.d("GameViewTouchEvent", "Left to Right");
+
+                    // Right to Left event
+                    /// TODO: 21.02.2019
+                    if (gameset[selectedCellY][selectedCellX].startX >= gameset[selectedCellY][selectedCellX - 1].startX) {
+                        gameset[selectedCellY][selectedCellX].startX = event.getX() - CELL_SIZE/2;
+                    }
+                    invalidate();
+                    Log.d("GameViewTouchEvent", "Right to Left");
+                    break;
+                }
+
+
+                if (selectedCellY + 2 > nextYPos && selectedCellY - 2 < nextYPos) {
+                    // UP to Down event
+                    /// TODO: 21.02.2019
+                    if (gameset[selectedCellY][selectedCellX].startY <= gameset[selectedCellY + 1][selectedCellX].startY) {
+                        gameset[selectedCellY][selectedCellX].startY = event.getY() - CELL_SIZE/2;
+                    }
+
+                    invalidate();
+                    Log.d("GameViewTouchEvent", "UP to Down");
+
+                    // Down to UP event
+                    /// TODO: 21.02.2019
+                    if (gameset[selectedCellY][selectedCellX].startY >= gameset[selectedCellY - 1][selectedCellX].startY) {
+                        gameset[selectedCellY][selectedCellX].startY = event.getY() - CELL_SIZE/2;
+                    }
+
+                    invalidate();
+                    Log.d("GameViewTouchEvent", "Down to UP");
+                }
+
+                break;
+            }*/
+        case MotionEvent.ACTION_UP: {
+            Bitmap buff;
+            nextXPos = (int) (event.getX() / CELL_SIZE);
+            nextYPos = (int) (event.getY() / CELL_SIZE);
+            reward.clear();
+
+            // Left to Right event
+            if (selectedCellX < nextXPos) {
+
+                float buff1 = gameset[selectedCellY][selectedCellX + 1].startX;
+                float buff2 = gameset[selectedCellY][selectedCellX].startX;
+//                    for (int i = 0; i < 10000000; i++){
+//                        gameset[selectedCellY][selectedCellX + 1].startX -= CELL_SIZE/10000000;
+//                        gameset[selectedCellY][selectedCellX].startX += CELL_SIZE/10000000;
+//                        invalidate();
+//                    }
+                gameset[selectedCellY][selectedCellX + 1].startX = buff1;
+                gameset[selectedCellY][selectedCellX].startX = buff2;
+
+
+                buff = gameset[selectedCellY][selectedCellX + 1].bitmap;
+                gameset[selectedCellY][selectedCellX + 1].bitmap = gameset[selectedCellY][selectedCellX].bitmap;
+                gameset[selectedCellY][selectedCellX].bitmap = buff;
+
+                invalidate();
+                Log.d("GameViewTouchEvent", "Left to Right");
+                checkCombo(selectedCellX, selectedCellY, selectedCellX + 1, selectedCellY);
+                break;
+            }
+
+            // Right to Left event
+            if (selectedCellX > nextXPos) {
+                buff = gameset[selectedCellY][selectedCellX - 1].bitmap;
+                gameset[selectedCellY][selectedCellX - 1].bitmap = gameset[selectedCellY][selectedCellX].bitmap;
+                gameset[selectedCellY][selectedCellX].bitmap = buff;
+
+                invalidate();
+                Log.d("GameViewTouchEvent", "Right to Left");
+                checkCombo(selectedCellX, selectedCellY, selectedCellX - 1, selectedCellY);
+                break;
+            }
+
+            // UP to Down event
+            if (selectedCellY < nextYPos) {
+                buff = gameset[selectedCellY + 1][selectedCellX].bitmap;
+                gameset[selectedCellY + 1][selectedCellX].bitmap = gameset[selectedCellY][selectedCellX].bitmap;
+                gameset[selectedCellY][selectedCellX].bitmap = buff;
+
+                invalidate();
+                Log.d("GameViewTouchEvent", "UP to Down");
+                checkCombo(selectedCellX, selectedCellY, selectedCellX, selectedCellY + 1);
+                break;
+            }
+
+            // Down to UP event
+            if (selectedCellY > nextYPos) {
+                buff = gameset[selectedCellY - 1][selectedCellX].bitmap;
+                gameset[selectedCellY - 1][selectedCellX].bitmap = gameset[selectedCellY][selectedCellX].bitmap;
+                gameset[selectedCellY][selectedCellX].bitmap = buff;
+
+                invalidate();
+                Log.d("GameViewTouchEvent", "Down to UP");
+                checkCombo(selectedCellX, selectedCellY, selectedCellX, selectedCellY - 1);
+                break;
+            }
+            break;
+        }
     }
+
+        return true;
+}
 
     public GameView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
@@ -197,14 +286,15 @@ public class GameView extends View {
                 }
             }
         }
-        startX = 0;
         startY = 0;
+        startX = 0;
 
-        //draw fruit
+        //draw fruits
         for (int i = 0; i < countY; i++, startX = 0, startY += CELL_SIZE) {
             for (int j = 0; j < countX; j++, startX += CELL_SIZE) {
 
 //                canvas.drawBitmap(gameset[i][j].bitmap, startX + (CELL_SIZE / 2 - gameset[i][j].bitmap.getWidth() / 2), startY + (CELL_SIZE / 2 - gameset[i][j].bitmap.getHeight() / 2), darkCellPaint);
+                Log.d("TESTinv", "draw");
                 canvas.drawBitmap(gameset[i][j].bitmap, gameset[i][j].startX + (CELL_SIZE / 2 - gameset[i][j].bitmap.getWidth() / 2), gameset[i][j].startY + (CELL_SIZE / 2 - gameset[i][j].bitmap.getHeight() / 2), darkCellPaint);
             }
         }
@@ -212,44 +302,34 @@ public class GameView extends View {
     }
 
     private void checkCombo(int firstX, int firstY, int secondX, int secondY) {
-        check(secondX,secondY);
+        int deathFlag = 0;
+        check(secondX, secondY);
         if (reward.size() > 2) {
-            Log.d("TESTbit", "____________");
-            Log.d("TESTbit", "countCell: " + reward.size());
-            Log.d("TESTbit", "countCell: " + reward.toString());
-            Log.d("TESTreward", "Co-co-combo! +" + ((reward.size() - 1) * 50));
-
-            for (Integer i : reward) {
-                int x = i % 10;
-                int y = i / 10;
-                gameset[y][x].bitmap = ((BitmapDrawable) getResources().getDrawable(R.drawable.icn_coin_sm)).getBitmap();
-            }
+            clearCombo(reward);
+            addCoins(reward.size());
         } else {
-            Log.d("TESTbit", "Комбинаций не найдено");
+            ++deathFlag;
+            Log.d("GameViewReward", "Комбинаций не найдено");
         }
         reward.clear();
 
 
-        check(firstX,firstY);
+        check(firstX, firstY);
         if (reward.size() > 2) {
-            Log.d("TESTbit", "____________");
-            Log.d("TESTbit", "countCell: " + reward.size());
-            Log.d("TESTbit", "countCell: " + reward.toString());
-            Log.d("TESTreward", "Co-co-combo! +" + ((reward.size() - 1) * 50));
-
-            for (Integer i : reward) {
-                int x = i % 10;
-                int y = i / 10;
-                gameset[y][x].bitmap = ((BitmapDrawable) getResources().getDrawable(R.drawable.icn_coin_sm)).getBitmap();
-            }
-
+            clearCombo(reward);
+            addCoins(reward.size());
         } else {
-            Log.d("TESTbit", "Комбинаций не найдено");
+            ++deathFlag;
+            Log.d("GameViewCombo", "Комбинаций не найдено");
         }
+        reward.clear();
 
+        if (deathFlag > 1) {
+            removeLife(firstX, firstY, secondX, secondY);
+        }
     }
 
-    private void check(int secondX, int secondY){
+    private void check(int secondX, int secondY) {
         boolean right = true;
         boolean left = true;
         boolean top = true;
@@ -289,7 +369,7 @@ public class GameView extends View {
                 left = false;
                 continue;
             }
-            check(secondX - count,secondY);
+            check(secondX - count, secondY);
             reward.add(secondY * 10 + (secondX - count));
             count++;
         }
@@ -307,7 +387,7 @@ public class GameView extends View {
                 top = false;
                 continue;
             }
-            check(secondX,secondY - count);
+            check(secondX, secondY - count);
             reward.add((secondY - count) * 10 + secondX);
             count++;
         }
@@ -331,6 +411,36 @@ public class GameView extends View {
         }
     }
 
+    private void clearCombo(HashSet<Integer> reward) {
+        Log.d("GameViewCombo", "____________");
+        Log.d("GameViewCombo", "countCell: " + reward.size());
+        Log.d("GameViewCombo", "countCell: " + reward.toString());
+
+        for (Integer i : reward) {
+            int x = i % 10;
+            int y = i / 10;
+            gameset[y][x].bitmap = ((BitmapDrawable) getResources().getDrawable(R.drawable.icn_coin_sm)).getBitmap();
+        }
+    }
+
+    private void addCoins(int rewardSetSize) {
+        int coins = (rewardSetSize - 1) * 50;
+        if (mListener != null)
+            mListener.saveReward(coins);
+        Log.d("GameViewReward", "Co-co-combo! +" + coins);
+    }
+
+    private void removeLife(int firstX, int firstY, int secondX, int secondY) {
+        Bitmap buff;
+        buff = gameset[firstY][firstX].bitmap;
+        gameset[firstY][firstX].bitmap = gameset[secondY][secondX].bitmap;
+        gameset[secondY][secondX].bitmap = buff;
+
+        if (mListener != null)
+            mListener.removeLife();
+        Log.d("GameViewReward", "-1 life");
+    }
+
     private int[] generateLine(int y) {
         int[] line = new int[countX];
         for (int i = 0; i < line.length; i++) {
@@ -340,11 +450,15 @@ public class GameView extends View {
     }
 
 
-    private class GameUnit {
+private class GameUnit {
+    public Bitmap bitmap;
+    public float startX;
+    public float startY;
+}
 
-        public Bitmap bitmap;
-        public float startX;
-        public float startY;
+public interface OnCustomListener {
+    void saveReward(int coins);
 
-    }
+    void removeLife();
+}
 }

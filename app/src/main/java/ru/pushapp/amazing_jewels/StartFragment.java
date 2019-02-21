@@ -46,12 +46,6 @@ public class StartFragment extends Fragment implements View.OnClickListener{
         switch (view.getId()){
             case R.id.play_btn:{
 
-//                SharedPreferences sharedPreferences = getContext().getSharedPreferences("local", Context.MODE_MULTI_PROCESS);
-//                SharedPreferences.Editor editor = sharedPreferences.edit();
-//                editor.putInt("money", 10000);
-//                editor.putInt("life", 2);
-//                editor.apply();
-
 //                Navigation.findNavController(view).navigate(R.id.action_startFragment_to_pauseFragment);
                 Navigation.findNavController(view).navigate(R.id.action_startFragment_to_gameFragment);
                 break;
