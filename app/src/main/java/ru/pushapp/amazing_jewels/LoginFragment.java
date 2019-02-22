@@ -1,5 +1,6 @@
 package ru.pushapp.amazing_jewels;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -22,6 +23,7 @@ import androidx.navigation.Navigation;
 
 public class LoginFragment extends Fragment implements  View.OnClickListener, View.OnFocusChangeListener{
 
+
     //1 - Log In screen
     //2 - Registration screen
     int STATE = 1;
@@ -38,8 +40,6 @@ public class LoginFragment extends Fragment implements  View.OnClickListener, Vi
 
     Button login;
     Button btnContinue;
-
-    //todo Добавить галочки подтверждения для Name and Email
 
     @Nullable
     @Override
@@ -75,6 +75,16 @@ public class LoginFragment extends Fragment implements  View.OnClickListener, Vi
         }
 
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences("local", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt("visibility", View.VISIBLE);
+        editor.apply();
     }
 
     public boolean checkLogIn(){
@@ -174,6 +184,11 @@ public class LoginFragment extends Fragment implements  View.OnClickListener, Vi
             case R.id.continue_btn_login: {
                 if (STATE == 1){
                     if (checkLogIn()){
+                        SharedPreferences sharedPreferences = getContext().getSharedPreferences("local", Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putInt("visibility", View.GONE);
+                        editor.apply();
+
                         Navigation.findNavController(view).navigate(R.id.action_loginFragment_to_startFragment);
                     } else {
                         Toast.makeText(getContext(), "Ошибка авторизации\nПроверьте введенные логин и пароль", Toast.LENGTH_SHORT).show();

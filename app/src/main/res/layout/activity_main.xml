@@ -42,6 +42,7 @@
         app:navGraph="@navigation/navigation" />
 
     <ImageView
+        android:id="@+id/bottom_btn_bg"
         android:background="@drawable/circle_btn"
         android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
