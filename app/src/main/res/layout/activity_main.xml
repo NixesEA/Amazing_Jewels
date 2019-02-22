@@ -31,8 +31,8 @@
         android:layout_height="wrap_content" />
 
     <fragment
-        android:layout_below="@id/count_life"
         android:id="@+id/my_nav_host_fragment"
+        android:layout_below="@id/count_life"
         android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

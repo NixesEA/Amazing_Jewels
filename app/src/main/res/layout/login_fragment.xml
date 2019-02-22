@@ -22,18 +22,17 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
         android:background="@drawable/shop_card_bg"
         android:orientation="vertical"
         android:paddingBottom="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintBottom_toTopOf="@id/continue_btn_login">
 
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/login_layout"
             style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+            android:maxLines="1"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:layout_marginStart="16dp"
@@ -42,7 +41,8 @@
             android:gravity="center_vertical"
             android:textColor="@color/halfWhite"
             android:textColorHint="@color/halfWhite"
-            app:boxBackgroundColor="@color/transparent">
+            app:boxBackgroundColor="@color/transparent"
+            android:nextFocusDown="@+id/email_layout">
 
             <android.support.design.widget.TextInputEditText
                 android:id="@+id/nickname_login"
@@ -50,12 +50,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/transparent"
+                android:singleLine="true"
                 android:hint="Name"
                 android:paddingTop="4dp"
                 android:paddingBottom="2dp"
                 android:textColor="@color/halfWhite"
                 android:textColorHint="@color/halfWhite"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:imeOptions="actionNext"/>
         </android.support.design.widget.TextInputLayout>
 
 
@@ -74,14 +76,17 @@
         <android.support.design.widget.TextInputLayout
             android:id="@+id/email_layout"
             style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+            android:maxLines="1"
             android:layout_width="match_parent"
+            android:visibility="gone"
             android:layout_height="48dp"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:focusableInTouchMode="true"
             android:textColor="@color/halfWhite"
             android:textColorHint="@color/halfWhite"
-            app:boxBackgroundColor="@color/transparent">
+            app:boxBackgroundColor="@color/transparent"
+            android:nextFocusDown="@+id/password_layout">
 
             <android.support.design.widget.TextInputEditText
                 android:id="@+id/email_login"
@@ -90,12 +95,14 @@
                 android:layout_height="match_parent"
                 android:background="@color/transparent"
                 android:hint="E-mail"
+                android:singleLine="true"
                 android:inputType="textEmailAddress"
                 android:paddingTop="4dp"
                 android:paddingBottom="2dp"
                 android:textColor="@color/halfWhite"
                 android:textColorHint="@color/halfWhite"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:imeOptions="actionNext"/>
         </android.support.design.widget.TextInputLayout>
 
 
@@ -111,6 +118,7 @@
         <android.support.design.widget.TextInputLayout
             android:id="@+id/password_layout"
             style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+            android:maxLines="1"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:layout_marginStart="16dp"
@@ -125,17 +133,18 @@
 
             <android.support.design.widget.TextInputEditText
                 android:id="@+id/password_login"
-                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/transparent"
                 android:hint="Password"
+                android:singleLine="true"
                 android:inputType="textPassword"
                 android:paddingTop="2dp"
                 android:paddingBottom="4dp"
                 android:textColor="@color/halfWhite"
                 android:textColorHint="@color/halfWhite"
-                android:textSize="16sp"/>
+                android:textSize="16sp" />
         </android.support.design.widget.TextInputLayout>
 
     </LinearLayout>
@@ -148,11 +157,9 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:background="@drawable/shop_card_bg"
-        android:text="Continue"
-        android:textColor="@color/white"
-        android:textSize="14sp"
-        app:layout_constraintTop_toBottomOf="@id/linear" />
+        android:layout_marginBottom="128dp"
+        android:background="@drawable/btn_continue"
+        app:layout_constraintBottom_toTopOf="@id/image_btn_login"/>
 
 
     <Button
@@ -164,15 +171,15 @@
 
     <TextView
         android:id="@+id/btn_text"
-        app:layout_constraintTop_toTopOf="@id/image_btn_login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Registration"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="@id/image_btn_login"
         app:layout_constraintEnd_toEndOf="@id/image_btn_login"
         app:layout_constraintStart_toStartOf="@id/image_btn_login"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Log in"
-        android:textAllCaps="false"
-        android:textColor="@color/white"
-        android:textSize="16sp"/>
+        app:layout_constraintTop_toTopOf="@id/image_btn_login" />
 
 </android.support.constraint.ConstraintLayout>

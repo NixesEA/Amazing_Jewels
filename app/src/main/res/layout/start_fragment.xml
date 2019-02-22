@@ -25,27 +25,18 @@
         android:src="@drawable/btn_play"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/settings_btn"
+        app:layout_constraintBottom_toTopOf="@id/shop_btn"
         app:layout_constraintTop_toBottomOf="@id/logo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
-    <ImageButton
-        android:id="@+id/settings_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:background="@color/transparent"
-        android:src="@drawable/btn_settings"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/shop_btn"
-        app:layout_constraintStart_toStartOf="@id/play_btn" />
+
     <ImageButton
         android:id="@+id/shop_btn"
         android:background="@color/transparent"
         android:src="@drawable/btn_shop"
-        app:layout_constraintTop_toTopOf="@id/settings_btn"
-        app:layout_constraintStart_toEndOf="@id/settings_btn"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@id/play_btn"
         app:layout_constraintEnd_toStartOf="@id/leaderboard_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />

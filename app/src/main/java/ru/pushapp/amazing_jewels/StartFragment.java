@@ -18,7 +18,6 @@ public class StartFragment extends Fragment implements View.OnClickListener{
 
     ImageButton play;
     ImageButton leaders;
-    ImageButton settings;
     ImageButton shop;
 
     @Nullable
@@ -34,9 +33,6 @@ public class StartFragment extends Fragment implements View.OnClickListener{
 
         shop = view.findViewById(R.id.shop_btn);
         shop.setOnClickListener(this);
-
-        settings = view.findViewById(R.id.settings_btn);
-        settings.setOnClickListener(this);
 
         return view;
     }
@@ -55,10 +51,6 @@ public class StartFragment extends Fragment implements View.OnClickListener{
                 break;
             }
             case R.id.shop_btn:{
-                Navigation.findNavController(view).navigate(R.id.action_startFragment_to_shopFragment);
-                break;
-            }
-            case R.id.settings_btn:{
                 Navigation.findNavController(view).navigate(R.id.action_startFragment_to_shopFragment);
                 break;
             }
