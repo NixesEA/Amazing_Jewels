@@ -1,6 +1,5 @@
 package ru.pushapp.amazing_jewels;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -38,7 +37,7 @@ public class PauseFragment extends Fragment implements View.OnClickListener{
         leaders = view.findViewById(R.id.leaderboard_btn);
 //        leaders.setOnClickListener(this);
 
-        shop = view.findViewById(R.id.shop_btn);
+        shop = view.findViewById(R.id.buy_life_btn);
 //        shop.setOnClickListener(this);
 
         return view;
@@ -48,16 +47,18 @@ public class PauseFragment extends Fragment implements View.OnClickListener{
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.play_btn:{
-                //TODO
-                callback.playAgain();
-//                getActivity().onBackPressed();
+                if (pause.getText().toString().equals("Play Again")){
+                    callback.playAgain();
+                } else {
+                    callback.resumeGame();
+                }
                 break;
             }
             case R.id.leaderboard_btn:{
                 Navigation.findNavController(view).navigate(R.id.action_startFragment_to_leaderBoardFragment);
                 break;
             }
-            case R.id.shop_btn:{
+            case R.id.buy_life_btn:{
                 Navigation.findNavController(view).navigate(R.id.action_startFragment_to_shopFragment);
                 break;
             }
@@ -71,5 +72,6 @@ public class PauseFragment extends Fragment implements View.OnClickListener{
 
     public interface OnResultListener {
         void playAgain();
+        void resumeGame();
     }
 }

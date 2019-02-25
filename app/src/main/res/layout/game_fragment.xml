@@ -1,17 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+    <ImageButton
+        android:id="@+id/pause_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:background="@color/transparent"
+        android:src="@drawable/icn_pause" />
+
+    <TextView
+        android:id="@+id/count_life"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="48dp"
+        android:layout_alignParentEnd="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="14"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textColor="@color/white"/>
+
+    <ImageView
+        android:id="@+id/heart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:foregroundGravity="center_vertical"
+        android:layout_margin="16dp"
+        android:src="@drawable/icn_heart" />
+
+    <TextView
+        android:id="@+id/game_score_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:background="@drawable/shop_card_bg"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:text="123456789"
+        android:layout_marginTop="16dp"
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:textStyle="bold"/>
+
 
     <ru.pushapp.amazing_jewels.GameView
         android:id="@+id/game_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_below="@id/pause_btn" />
 
     <FrameLayout
         android:id="@+id/pause_frame"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent" />
 
-</android.support.constraint.ConstraintLayout>
+</RelativeLayout>

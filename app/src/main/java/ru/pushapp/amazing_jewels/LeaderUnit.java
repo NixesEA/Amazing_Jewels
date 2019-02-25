@@ -1,6 +1,8 @@
 package ru.pushapp.amazing_jewels;
 
-public class LeaderUnit {
+import android.support.annotation.NonNull;
+
+public class LeaderUnit implements Comparable {
 
     String name;
     int score;
@@ -25,5 +27,11 @@ public class LeaderUnit {
 
     public void setScore(int score) {
         this.score = score;
+    }
+
+    @Override
+    public int compareTo(@NonNull Object o) {
+        int comparescore = ((LeaderUnit) o).getScore();
+        return -(this.score - comparescore);
     }
 }

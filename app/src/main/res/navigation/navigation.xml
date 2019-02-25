@@ -46,12 +46,11 @@
         android:id="@+id/leaderBoardFragment"
         android:name="ru.pushapp.amazing_jewels.LeaderBoardFragment"
         android:label="leader_bord_fragment"
-        tools:layout="@layout/leader_bord_fragment" />
-    <fragment
-        android:id="@+id/pauseFragment"
-        android:name="ru.pushapp.amazing_jewels.PauseFragment"
-        android:label="pause_fragment"
-        tools:layout="@layout/pause_fragment" />
+        tools:layout="@layout/leader_bord_fragment" >
+        <action
+            android:id="@+id/action_leaderBoardFragment_to_shopFragment"
+            app:destination="@id/shopFragment" />
+    </fragment>
     <fragment
         android:id="@+id/gameFragment"
         android:name="ru.pushapp.amazing_jewels.GameFragment"

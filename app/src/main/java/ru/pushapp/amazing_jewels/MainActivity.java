@@ -10,8 +10,6 @@ import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener, View.OnClickListener{
 
-    TextView coinsTV;
-    TextView externalLifeTV;
     ImageView bottomBtn;
 
     @Override
@@ -19,34 +17,24 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        coinsTV = findViewById(R.id.count_coins);
-        externalLifeTV = findViewById(R.id.count_life);
-
         bottomBtn = findViewById(R.id.bottom_btn_bg);
     }
 
     @Override
     protected void onResume() {
         SharedPreferences sharedPreferences = getSharedPreferences("local", Context.MODE_MULTI_PROCESS);
-        int userBalance = sharedPreferences.getInt("money", 0);
-        int externalLife = sharedPreferences.getInt("life", 0);
-
-        coinsTV.setText(String.valueOf(userBalance));
-        coinsTV.setOnClickListener(this);
-        externalLifeTV.setText(String.valueOf(externalLife));
-
         sharedPreferences.registerOnSharedPreferenceChangeListener(this);
+
+        int visibility = sharedPreferences.getInt("visibility", 0);
+        bottomBtn.setVisibility(visibility);
+
         super.onResume();
     }
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
-        int userBalance = sharedPreferences.getInt("money", 0);
-        int externalLife = sharedPreferences.getInt("life", 0);
         int visibility = sharedPreferences.getInt("visibility", 0);
 
-        coinsTV.setText(String.valueOf(userBalance));
-        externalLifeTV.setText(String.valueOf(externalLife));
         bottomBtn.setVisibility(visibility);
     }
 

@@ -2,7 +2,6 @@ package ru.pushapp.amazing_jewels;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.animation.AnimatorSet;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -17,8 +16,6 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import java.util.HashSet;
-
-import static android.view.FrameMetrics.ANIMATION_DURATION;
 
 public class GameView extends View {
     final int ANIM_DURATION = 400;
@@ -74,71 +71,6 @@ public class GameView extends View {
                 Log.d("GameViewTouchEvent", "Down");
                 break;
             }
-            case MotionEvent.ACTION_MOVE: {
-
-                nextXPos = (int) (event.getX() / CELL_SIZE);
-                nextYPos = (int) (event.getY() / CELL_SIZE);
-
-                if (!(horizontalFlag && verticalFlag)) {
-                    if (selectedCellX + 2 > nextXPos && selectedCellX - 2 < nextXPos) {
-                        horizontalFlag = true;
-                        break;
-                    } else {
-                        horizontalFlag = false;
-                        //todo return to previously place
-                    }
-                    if (selectedCellY + 2 > nextYPos && selectedCellY - 2 < nextYPos) {
-                        verticalFlag = true;
-                        break;
-                    } else {
-                        verticalFlag = false;
-                    }
-                }
-            }
-
-/*                reward.clear();
-
-                if (selectedCellX + 2 > nextXPos && selectedCellX - 2 < nextXPos) {
-                    // Left to Right event
-                    if (gameset[selectedCellY][selectedCellX].startX < gameset[selectedCellY][selectedCellX + 1].startX) {
-                        gameset[selectedCellY][selectedCellX].startX = event.getX() - CELL_SIZE/2;
-                    }
-                    invalidate();
-                    Log.d("GameViewTouchEvent", "Left to Right");
-
-                    // Right to Left event
-                    /// TODO: 21.02.2019
-                    if (gameset[selectedCellY][selectedCellX].startX >= gameset[selectedCellY][selectedCellX - 1].startX) {
-                        gameset[selectedCellY][selectedCellX].startX = event.getX() - CELL_SIZE/2;
-                    }
-                    invalidate();
-                    Log.d("GameViewTouchEvent", "Right to Left");
-                    break;
-                }
-
-
-                if (selectedCellY + 2 > nextYPos && selectedCellY - 2 < nextYPos) {
-                    // UP to Down event
-                    /// TODO: 21.02.2019
-                    if (gameset[selectedCellY][selectedCellX].startY <= gameset[selectedCellY + 1][selectedCellX].startY) {
-                        gameset[selectedCellY][selectedCellX].startY = event.getY() - CELL_SIZE/2;
-                    }
-
-                    invalidate();
-                    Log.d("GameViewTouchEvent", "UP to Down");
-
-                    // Down to UP event
-                    /// TODO: 21.02.2019
-                    if (gameset[selectedCellY][selectedCellX].startY >= gameset[selectedCellY - 1][selectedCellX].startY) {
-                        gameset[selectedCellY][selectedCellX].startY = event.getY() - CELL_SIZE/2;
-                    }
-
-                    invalidate();
-                    Log.d("GameViewTouchEvent", "Down to UP");
-                }
-
-                break;
-            }*/
             case MotionEvent.ACTION_UP: {
                 nextXPos = (int) (event.getX() / CELL_SIZE);
                 nextYPos = (int) (event.getY() / CELL_SIZE);
@@ -270,9 +202,8 @@ public class GameView extends View {
         HEIGHT_SCREEN = getMeasuredHeight();
         CELL_SIZE = WIDTH_SCREEN / 6;
 
+        countY = ((int) (HEIGHT_SCREEN / CELL_SIZE)) - 1;
         countX = (int) (WIDTH_SCREEN / CELL_SIZE);
-        countY = (int) (HEIGHT_SCREEN / CELL_SIZE) - 1;
-
 
         for (int i = 0; i < prefab.length; i++) {
             Drawable d = getResources().getDrawable(prefabRes[i]);
@@ -280,8 +211,7 @@ public class GameView extends View {
             prefab[i] = b;
         }
 
-
-        if (gameset == null) {
+        if (gameset == null || gameset.length != countY) {
             generateGameSet();
         }
     }
@@ -289,8 +219,6 @@ public class GameView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-
-        Log.i("TESTmove", "draw" + countX);
 
         //draw chess board
         float startX = 0;
@@ -319,7 +247,6 @@ public class GameView extends View {
                             gameset[i][j].bitmap = gameset[i - 1][j].bitmap;
                             gameset[i - 1][j].bitmap = coin;
 
-//                            animY(i - 1,i,false);
                             i = 0;
                             j = 0;
                             break;
@@ -340,7 +267,6 @@ public class GameView extends View {
                     gameset[i][j].bitmap = prefab[index];
                 }
 
-//                canvas.drawBitmap(gameset[i][j].bitmap, startX + (CELL_SIZE / 2 - gameset[i][j].bitmap.getWidth() / 2), startY + (CELL_SIZE / 2 - gameset[i][j].bitmap.getHeight() / 2), darkCellPaint);
                 canvas.drawBitmap(gameset[i][j].bitmap, gameset[i][j].startX + (CELL_SIZE / 2 - gameset[i][j].bitmap.getWidth() / 2), gameset[i][j].startY + (CELL_SIZE / 2 - gameset[i][j].bitmap.getHeight() / 2), darkCellPaint);
             }
         }

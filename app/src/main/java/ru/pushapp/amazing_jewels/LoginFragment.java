@@ -88,8 +88,8 @@ public class LoginFragment extends Fragment implements  View.OnClickListener, Vi
     }
 
     public boolean checkLogIn(){
-        String typingName = String.valueOf(editName.getText());
-        String typingPassword = String.valueOf(editPassword.getText());
+        String typingName = String.valueOf(editName.getText().toString().replace(" ",""));
+        String typingPassword = String.valueOf(editPassword.getText().toString().replace(" ",""));
 
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("local", Context.MODE_PRIVATE);
         String userName = sharedPreferences.getString("userName", "");
@@ -109,6 +109,7 @@ public class LoginFragment extends Fragment implements  View.OnClickListener, Vi
     private boolean checkName(){
         if (!String.valueOf(editName.getText()).equals("")){
             editName.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.check_sm, 0);
+            editName.setText(editName.getText().toString().replace(" ",""));
             return true;
         } else {
             editName.setError("Name can't be empty");
@@ -127,9 +128,9 @@ public class LoginFragment extends Fragment implements  View.OnClickListener, Vi
     }
 
     public boolean saveLogIn(){
-        String typingName = String.valueOf(editName.getText());
-        String typingEmail = String.valueOf(editEmail.getText());
-        String typingPassword = String.valueOf(editPassword.getText());
+        String typingName = String.valueOf(editName.getText().toString().replace(" ",""));
+        String typingEmail = String.valueOf(editEmail.getText().toString().replace(" ",""));
+        String typingPassword = String.valueOf(editPassword.getText().toString().replace(" ",""));
 
         checkName();
         checkEmail();

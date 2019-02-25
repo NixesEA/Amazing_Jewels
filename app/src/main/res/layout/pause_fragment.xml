@@ -50,7 +50,7 @@
 
 
     <ImageButton
-        android:id="@+id/shop_btn"
+        android:id="@+id/buy_life_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@color/transparent"
@@ -67,7 +67,7 @@
         android:background="@color/transparent"
         android:src="@drawable/btn_leaders"
         app:layout_constraintEnd_toEndOf="@id/play_btn"
-        app:layout_constraintStart_toEndOf="@id/shop_btn"
-        app:layout_constraintTop_toTopOf="@id/shop_btn" />
+        app:layout_constraintStart_toEndOf="@id/buy_life_btn"
+        app:layout_constraintTop_toTopOf="@id/buy_life_btn" />
 
 </android.support.constraint.ConstraintLayout>

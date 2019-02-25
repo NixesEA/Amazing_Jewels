@@ -11,6 +11,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -18,7 +20,14 @@ import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
-public class LeaderBoardFragment extends Fragment {
+import androidx.navigation.Navigation;
+
+public class LeaderBoardFragment extends Fragment implements View.OnClickListener, SharedPreferences.OnSharedPreferenceChangeListener {
+
+    TextView countCoin;
+
+    ImageButton backBtn;
+    ImageButton shopBtn;
 
     RecyclerView recyclerView;
 
@@ -27,6 +36,13 @@ public class LeaderBoardFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.leader_bord_fragment, container, false);
 
+        countCoin = view.findViewById(R.id.count_coin);
+
+        backBtn = view.findViewById(R.id.arrow_back);
+        backBtn.setOnClickListener(this);
+
+        shopBtn = view.findViewById(R.id.add_btn);
+        shopBtn.setOnClickListener(this);
 
         ArrayList<LeaderUnit> leaderList = getArrayList();
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
@@ -37,6 +53,17 @@ public class LeaderBoardFragment extends Fragment {
         recyclerView.setAdapter(adapter);
 
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences("local", Context.MODE_MULTI_PROCESS);
+        int userBalance = sharedPreferences.getInt("money", 0);
+
+        countCoin.setText(String.valueOf(userBalance));
+        sharedPreferences.registerOnSharedPreferenceChangeListener(this);
     }
 
     /**
@@ -55,7 +82,8 @@ public class LeaderBoardFragment extends Fragment {
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("local", Context.MODE_MULTI_PROCESS);
         Gson gson = new Gson();
         String json = sharedPreferences.getString("leaderBoard", null);
-        Type type = new TypeToken<ArrayList<LeaderUnit>>() {}.getType();
+        Type type = new TypeToken<ArrayList<LeaderUnit>>() {
+        }.getType();
 
         ArrayList<LeaderUnit> leaderList = gson.fromJson(json, type);
         int listSize = 7;
@@ -74,4 +102,23 @@ public class LeaderBoardFragment extends Fragment {
         return leaderList;
     }
 
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.arrow_back: {
+                getActivity().onBackPressed();
+                break;
+            }
+            case R.id.add_btn: {
+                Navigation.findNavController(view).navigate(R.id.action_leaderBoardFragment_to_shopFragment);
+                break;
+            }
+        }
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
+        int userBalance = sharedPreferences.getInt("money", 0);
+        countCoin.setText(String.valueOf(userBalance));
+    }
 }
