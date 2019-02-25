@@ -18,7 +18,7 @@ import android.view.View;
 import java.util.HashSet;
 
 public class GameView extends View {
-    final int ANIM_DURATION = 400;
+    final int ANIM_DURATION = 300;
     OnCustomListener mListener;
 
     int countX = 0;
@@ -179,6 +179,12 @@ public class GameView extends View {
     public GameView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
 
+        for (int i = 0; i < prefab.length; i++) {
+            Drawable d = getResources().getDrawable(prefabRes[i]);
+            Bitmap b = ((BitmapDrawable) d).getBitmap();
+            prefab[i] = b;
+        }
+
         //gradient
 //        LinearGradient lightGradient = new LinearGradient(0, 0, 200, 200, getResources().getColor(R.color.start_dark_cell),
 //                getResources().getColor(R.color.stop_dark_cell), Shader.TileMode.CLAMP);
@@ -205,11 +211,6 @@ public class GameView extends View {
         countY = ((int) (HEIGHT_SCREEN / CELL_SIZE)) - 1;
         countX = (int) (WIDTH_SCREEN / CELL_SIZE);
 
-        for (int i = 0; i < prefab.length; i++) {
-            Drawable d = getResources().getDrawable(prefabRes[i]);
-            Bitmap b = ((BitmapDrawable) d).getBitmap();
-            prefab[i] = b;
-        }
 
         if (gameset == null || gameset.length != countY) {
             generateGameSet();
@@ -280,7 +281,7 @@ public class GameView extends View {
             float startY = 0;
 
             for (int i = 0; i < countY; i++) {
-                int[] line = generateLine(i);
+                int[] line = generateLine();
                 for (int j = 0; j < countX; j++) {
                     int index = line[j];
                     gameset[i][j] = new GameUnit();
@@ -328,84 +329,89 @@ public class GameView extends View {
         }
     }
 
-    private void check(int secondX, int secondY) {
+    private void check(int x, int y) {
         boolean right = true;
         boolean left = true;
         boolean top = true;
         boolean bottom = true;
 
-        reward.add(secondY * 10 + secondX);
+        reward.add(y * 10 + x);
 
         int count = 1;
         while (right) {
-            if (secondX + count >= countX) {
+            if (x + count >= countX) {
                 right = false;
                 continue;
             }
 
-            if (reward.contains(secondY * 10 + (secondX + count))) {
-                break;
+            if (reward.contains(y * 10 + (x + count))) {
+                right = false;
+                continue;
+
             }
-            if (gameset[secondY][secondX].bitmap != gameset[secondY][secondX + count].bitmap) {
+            if (!gameset[y][x].bitmap.equals(gameset[y][x + count].bitmap)) {
                 right = false;
                 continue;
             }
-            check(secondX + count, secondY);
-            reward.add(secondY * 10 + (secondX + count));
+            reward.add(y * 10 + (x + count));
+            check(x + count, y);
             count++;
         }
 
         count = 1;
         while (left) {
-            if (secondX - count <= -1) {
+            if (x - count <= -1) {
                 left = false;
                 continue;
             }
-            if (reward.contains(secondY * 10 + (secondX - count))) {
-                break;
-            }
-            if (gameset[secondY][secondX].bitmap != gameset[secondY][secondX - count].bitmap) {
+            if (reward.contains(y * 10 + (x - count))) {
                 left = false;
                 continue;
             }
-            check(secondX - count, secondY);
-            reward.add(secondY * 10 + (secondX - count));
+            if (!gameset[y][x].bitmap.equals(gameset[y][x - count].bitmap)) {
+                left = false;
+                continue;
+            }
+            reward.add(y * 10 + (x - count));
+            check(x - count, y);
             count++;
         }
 
         count = 1;
         while (top) {
-            if (secondY - count <= -1) {
+            if (y - count <= -1) {
                 top = false;
                 continue;
             }
-            if (reward.contains((secondY - count) * 10 + secondX)) {
-                break;
-            }
-            if (gameset[secondY][secondX].bitmap != gameset[secondY - count][secondX].bitmap) {
+            if (reward.contains((y - count) * 10 + x)) {
                 top = false;
                 continue;
             }
-            check(secondX, secondY - count);
-            reward.add((secondY - count) * 10 + secondX);
+            if (!gameset[y][x].bitmap.equals(gameset[y - count][x].bitmap)) {
+                top = false;
+                continue;
+            }
+            reward.add((y - count) * 10 + x);
+            check(x, y - count);
             count++;
         }
 
         count = 1;
         while (bottom) {
-            if (secondY + count >= countY) {
+            if (y + count >= countY) {
                 bottom = false;
                 continue;
             }
-            if (reward.contains((secondY + count) * 10 + secondX)) {
-                break;
-            }
-            if (gameset[secondY][secondX].bitmap != gameset[secondY + count][secondX].bitmap) {
+            if (reward.contains((y + count) * 10 + x)) {
                 bottom = false;
                 continue;
             }
-            check(secondX, secondY + count);
-            reward.add((secondY + count) * 10 + secondX);
+            if (!gameset[y][x].bitmap.equals(gameset[y + count][x].bitmap)) {
+                bottom = false;
+                continue;
+            }
+            reward.add((y + count) * 10 + x);
+            check(x, y + count);
             count++;
         }
     }
@@ -442,7 +448,7 @@ public class GameView extends View {
         Log.d("GameViewReward", "-1 life");
     }
 
-    private int[] generateLine(int y) {
+    private int[] generateLine() {
         int[] line = new int[countX];
         for (int i = 0; i < line.length; i++) {
             line[i] = (int) (Math.random() * countX);

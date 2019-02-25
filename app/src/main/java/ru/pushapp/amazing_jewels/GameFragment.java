@@ -63,10 +63,9 @@ public class GameFragment extends Fragment implements GameView.OnCustomListener,
     public void onResume() {
         super.onResume();
 
-        int userBalance = sharedPreferences.getInt("money", 0);
         int externalLife = sharedPreferences.getInt("life", DEFAULT_LIFE_COUNT);
 
-        scoreCount.setText(String.valueOf(userBalance));
+        scoreCount.setText(String.valueOf(0));
         lifeCount.setText(String.valueOf(externalLife));
 
         sharedPreferences.registerOnSharedPreferenceChangeListener(this);
@@ -78,7 +77,6 @@ public class GameFragment extends Fragment implements GameView.OnCustomListener,
         scoreCount.setText(String.valueOf(SCORE));
 
         saveResult();
-
         int userBalance = coins + sharedPreferences.getInt("money", 0);
 
         editor.putInt("money", userBalance);
@@ -89,16 +87,11 @@ public class GameFragment extends Fragment implements GameView.OnCustomListener,
     public void removeLife() {
         int externalLife = sharedPreferences.getInt("life", DEFAULT_LIFE_COUNT);
 
-        //todo save result
-//        saveResult();
-
         editor.putInt("life", --externalLife);
         editor.apply();
 
         if (externalLife <= 0){
             startPauseFragment("Play Again");
-            editor.putInt("life", DEFAULT_LIFE_COUNT);
-            editor.apply();
         }
     }
 
@@ -167,6 +160,9 @@ public class GameFragment extends Fragment implements GameView.OnCustomListener,
 
     @Override
     public void resumeGame() {
+        editor.putInt("life", DEFAULT_LIFE_COUNT);
+        editor.apply();
+
         frame.setVisibility(View.GONE);
     }
 
@@ -191,10 +187,8 @@ public class GameFragment extends Fragment implements GameView.OnCustomListener,
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
-        int userBalance = sharedPreferences.getInt("money", 0);
         int externalLife = sharedPreferences.getInt("life", 0);
 
-//        scoreCount.setText(String.valueOf(userBalance));
         lifeCount.setText(String.valueOf(externalLife));
     }
 }
