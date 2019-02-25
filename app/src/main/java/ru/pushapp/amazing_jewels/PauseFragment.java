@@ -14,6 +14,8 @@ import androidx.navigation.Navigation;
 
 public class PauseFragment extends Fragment implements View.OnClickListener{
 
+    int STATE = 0;
+
     ImageButton play;
     ImageButton leaders;
 
@@ -28,8 +30,13 @@ public class PauseFragment extends Fragment implements View.OnClickListener{
         View view = inflater.inflate(R.layout.pause_fragment, container, false);
 
         pause = view.findViewById(R.id.pause_txt);
-        String msg = getArguments().getString("label");
-        pause.setText(msg);
+//        String msg = getArguments().getString("label");
+        STATE = getArguments().getInt("statePause");
+        if (STATE == 0){
+            pause.setText("Pause");
+        } else {
+            pause.setText("Play Again");
+        }
 
         play = view.findViewById(R.id.play_btn);
         play.setOnClickListener(this);
@@ -38,7 +45,7 @@ public class PauseFragment extends Fragment implements View.OnClickListener{
 //        leaders.setOnClickListener(this);
 
         shop = view.findViewById(R.id.buy_life_btn);
-//        shop.setOnClickListener(this);
+        shop.setOnClickListener(this);
 
         return view;
     }
@@ -47,7 +54,7 @@ public class PauseFragment extends Fragment implements View.OnClickListener{
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.play_btn:{
-                if (pause.getText().toString().equals("Play Again")){
+                if (STATE == 1){
                     callback.playAgain();
                 } else {
                     callback.resumeGame();
@@ -59,7 +66,7 @@ public class PauseFragment extends Fragment implements View.OnClickListener{
                 break;
             }
             case R.id.buy_life_btn:{
-                Navigation.findNavController(view).navigate(R.id.action_startFragment_to_shopFragment);
+                Navigation.findNavController(view).navigate(R.id.action_gameFragment_to_shopFragment);
                 break;
             }
 

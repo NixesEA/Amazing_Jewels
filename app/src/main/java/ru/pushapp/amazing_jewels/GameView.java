@@ -6,9 +6,12 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.LinearGradient;
 import android.graphics.Paint;
+import android.graphics.Shader;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -34,6 +37,7 @@ public class GameView extends View {
     int nextXPos;
     int nextYPos;
 
+    private GradientDrawable mDrawable;
     Paint topDarkGrad = new Paint();
     Paint topLightGrad = new Paint();
 
@@ -79,7 +83,7 @@ public class GameView extends View {
                 // Left to Right event
                 if (selectedCellX < nextXPos) {
 
-                    animX(selectedCellX,selectedCellX + 1,true);
+                    animX(selectedCellX, selectedCellX + 1, true);
                     Log.d("GameViewTouchEvent", "Left to Right");
                     break;
                 }
@@ -87,7 +91,7 @@ public class GameView extends View {
                 // Right to Left event
                 if (selectedCellX > nextXPos) {
 
-                    animX(selectedCellX, selectedCellX - 1,true);
+                    animX(selectedCellX, selectedCellX - 1, true);
                     Log.d("GameViewTouchEvent", "Right to Left");
                     break;
                 }
@@ -95,7 +99,7 @@ public class GameView extends View {
                 // UP to Down event
                 if (selectedCellY < nextYPos) {
 
-                    animY(selectedCellY, selectedCellY + 1,true);
+                    animY(selectedCellY, selectedCellY + 1, true);
                     Log.d("GameViewTouchEvent", "UP to Down");
                     break;
                 }
@@ -103,7 +107,7 @@ public class GameView extends View {
                 // Down to UP event
                 if (selectedCellY > nextYPos) {
 
-                    animY(selectedCellY,selectedCellY - 1,true);
+                    animY(selectedCellY, selectedCellY - 1, true);
                     Log.d("GameViewTouchEvent", "Down to UP");
                     break;
                 }
@@ -114,7 +118,7 @@ public class GameView extends View {
         return true;
     }
 
-    private void animY(final int fY, final int sY, final boolean check){
+    private void animY(final int fY, final int sY, final boolean check) {
         final float buff1 = gameset[sY][selectedCellX].startY;
         final float buff2 = gameset[fY][selectedCellX].startY;
 
@@ -123,7 +127,7 @@ public class GameView extends View {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
                 gameset[sY][selectedCellX].startY = (float) animation.getAnimatedValue();
-                gameset[fY][selectedCellX].startY = buff1 - ((float)animation.getAnimatedValue() - buff2);
+                gameset[fY][selectedCellX].startY = buff1 - ((float) animation.getAnimatedValue() - buff2);
                 invalidate();
             }
         });
@@ -137,15 +141,15 @@ public class GameView extends View {
                 gameset[sY][selectedCellX].bitmap = gameset[fY][selectedCellX].bitmap;
                 gameset[fY][selectedCellX].bitmap = buff;
 
-                if(check){
-                    checkCombo(selectedCellX, fY, selectedCellX , sY);
+                if (check) {
+                    checkCombo(selectedCellX, fY, selectedCellX, sY);
                 }
             }
         });
         animatorY.setDuration(ANIM_DURATION).start();
     }
 
-    private void animX(final int fX, final int sX, final boolean check){
+    private void animX(final int fX, final int sX, final boolean check) {
         final float buff1 = gameset[selectedCellY][sX].startX;
         final float buff2 = gameset[selectedCellY][fX].startX;
 
@@ -154,7 +158,7 @@ public class GameView extends View {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
                 gameset[selectedCellY][sX].startX = (float) animation.getAnimatedValue();
-                gameset[selectedCellY][fX].startX = buff1 - ((float)animation.getAnimatedValue() - buff2);
+                gameset[selectedCellY][fX].startX = buff1 - ((float) animation.getAnimatedValue() - buff2);
                 invalidate();
             }
         });
@@ -168,7 +172,7 @@ public class GameView extends View {
                 gameset[selectedCellY][sX].bitmap = gameset[selectedCellY][fX].bitmap;
                 gameset[selectedCellY][fX].bitmap = buff;
 
-                if (check){
+                if (check) {
                     checkCombo(fX, selectedCellY, sX, selectedCellY);
                 }
             }
@@ -186,15 +190,11 @@ public class GameView extends View {
         }
 
         //gradient
-//        LinearGradient lightGradient = new LinearGradient(0, 0, 200, 200, getResources().getColor(R.color.start_dark_cell),
-//                getResources().getColor(R.color.stop_dark_cell), Shader.TileMode.CLAMP);
-//        topLightGrad.setDither(true);
-//        topLightGrad.setShader(lightGradient);
 
-//        LinearGradient darkGradient = new LinearGradient(0, 0, 200, 200, getResources().getColor(R.color.start_dark_cell),
-//                getResources().getColor(R.color.stop_dark_cell), Shader.TileMode.CLAMP);
-//        topDarkGrad.setDither(true);
-//        topDarkGrad.setShader(darkGradient);
+        mDrawable = new GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT,
+                new int[]{0xFFFF0000, 0xFF00FF00,
+                        0xFF0000FF});
+        mDrawable.setShape(GradientDrawable.RECTANGLE);
 
         lightCellPaint.setColor(getResources().getColor(R.color.light_cell));
         darkCellPaint.setColor(getResources().getColor(R.color.dark_cell));
@@ -228,18 +228,36 @@ public class GameView extends View {
             for (int j = 0; j < countX; j++, startX += CELL_SIZE) {
 
                 if ((i + j) % 2 == 0) {
-                    canvas.drawRect(startX, startY, startX + CELL_SIZE, startY + CELL_SIZE, lightCellPaint);
+                    if (i == 0) {
+                        topLightGrad.setShader(new LinearGradient(startX + CELL_SIZE / 2, startY, startX + CELL_SIZE / 2, startY + CELL_SIZE, getResources().getColor(R.color.stop_light_cell), getResources().getColor(R.color.start_light_cell), Shader.TileMode.MIRROR));
+                        canvas.drawRect(startX, startY, startX + CELL_SIZE, startY + CELL_SIZE, topLightGrad);
+                    } else if (i == countY - 1) {
+                        topLightGrad.setShader(new LinearGradient(startX + CELL_SIZE / 2, startY, startX + CELL_SIZE / 2, startY + CELL_SIZE, getResources().getColor(R.color.start_light_cell), getResources().getColor(R.color.stop_light_cell), Shader.TileMode.MIRROR));
+                        canvas.drawRect(startX, startY, startX + CELL_SIZE, startY + CELL_SIZE, topLightGrad);
+                    } else {
+                        canvas.drawRect(startX, startY, startX + CELL_SIZE, startY + CELL_SIZE, lightCellPaint);
+                    }
                 } else {
-                    canvas.drawRect(startX, startY, startX + CELL_SIZE, startY + CELL_SIZE, darkCellPaint);
+                    if (i == 0) {
+                        topDarkGrad.setShader(new LinearGradient(startX + CELL_SIZE / 2, startY, startX + CELL_SIZE / 2, startY + CELL_SIZE, getResources().getColor(R.color.stop_dark_cell), getResources().getColor(R.color.start_dark_cell), Shader.TileMode.MIRROR));
+                        canvas.drawRect(startX, startY, startX + CELL_SIZE, startY + CELL_SIZE, topDarkGrad);
+                    } else if(i == countY - 1){
+                        topDarkGrad.setShader(new LinearGradient(startX + CELL_SIZE / 2, startY, startX + CELL_SIZE / 2, startY + CELL_SIZE, getResources().getColor(R.color.start_dark_cell), getResources().getColor(R.color.stop_dark_cell), Shader.TileMode.MIRROR));
+                        canvas.drawRect(startX, startY, startX + CELL_SIZE, startY + CELL_SIZE, topDarkGrad);
+                    } else {
+                        canvas.drawRect(startX, startY, startX + CELL_SIZE, startY + CELL_SIZE, darkCellPaint);
+                    }
                 }
             }
         }
 
-        //Picks up coins
+        //Pick up coins
         startY = 0;
         startX = 0;
         Bitmap coin = ((BitmapDrawable) getResources().getDrawable(R.drawable.icn_coin_sm)).getBitmap();
-        for (int i = 0; i < countY; i++, startX = 0, startY += CELL_SIZE) {
+        for (
+                int i = 0;
+                i < countY; i++, startX = 0, startY += CELL_SIZE) {
             for (int j = 0; j < countX; j++, startX += CELL_SIZE) {
                 if (gameset[i][j].bitmap == coin) {
                     try {
@@ -261,7 +279,9 @@ public class GameView extends View {
         //draw fruits
         startY = 0;
         startX = 0;
-        for (int i = 0; i < countY; i++, startX = 0, startY += CELL_SIZE) {
+        for (
+                int i = 0;
+                i < countY; i++, startX = 0, startY += CELL_SIZE) {
             for (int j = 0; j < countX; j++, startX += CELL_SIZE) {
                 if (gameset[i][j].bitmap == coin) {
                     int index = (int) (Math.random() * countX);
@@ -437,10 +457,10 @@ public class GameView extends View {
 
     private void removeLife(int firstX, int firstY, int secondX, int secondY) {
 
-        if (secondX==firstX){
-            animY(secondY,firstY,false);
+        if (secondX == firstX) {
+            animY(secondY, firstY, false);
         } else {
-            animX(secondX,firstX,false);
+            animX(secondX, firstX, false);
         }
 
         if (mListener != null)

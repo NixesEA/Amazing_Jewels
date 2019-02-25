@@ -91,7 +91,7 @@ public class GameFragment extends Fragment implements GameView.OnCustomListener,
         editor.apply();
 
         if (externalLife <= 0){
-            startPauseFragment("Play Again");
+            startPauseFragment(1);
         }
     }
 
@@ -150,7 +150,8 @@ public class GameFragment extends Fragment implements GameView.OnCustomListener,
 
     @Override
     public void playAgain() {
-        editor.putInt("life", 5);
+        SCORE = 0;
+        editor.putInt("life", DEFAULT_LIFE_COUNT);
         editor.apply();
 
         gameView.generateGameSet();
@@ -160,18 +161,15 @@ public class GameFragment extends Fragment implements GameView.OnCustomListener,
 
     @Override
     public void resumeGame() {
-        editor.putInt("life", DEFAULT_LIFE_COUNT);
-        editor.apply();
-
         frame.setVisibility(View.GONE);
     }
 
-    private void startPauseFragment(String msg) {
+    private void startPauseFragment(int state) {
         PauseFragment pauseFragment = new PauseFragment();
         pauseFragment.setOnResultListener(this);
 
         Bundle bundle = new Bundle();
-        bundle.putString("label", msg);
+        bundle.putInt("statePause", state);
         pauseFragment.setArguments(bundle);
 
         frame.setVisibility(View.VISIBLE);
@@ -182,12 +180,12 @@ public class GameFragment extends Fragment implements GameView.OnCustomListener,
 
     @Override
     public void onClick(View view) {
-        startPauseFragment("Pause");
+        startPauseFragment(0);
     }
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
-        int externalLife = sharedPreferences.getInt("life", 0);
+        int externalLife = sharedPreferences.getInt("life", DEFAULT_LIFE_COUNT);
 
         lifeCount.setText(String.valueOf(externalLife));
     }
