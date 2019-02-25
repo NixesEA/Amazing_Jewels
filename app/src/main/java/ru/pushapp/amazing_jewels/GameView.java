@@ -1,5 +1,9 @@
 package ru.pushapp.amazing_jewels;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -14,7 +18,10 @@ import android.view.View;
 
 import java.util.HashSet;
 
+import static android.view.FrameMetrics.ANIMATION_DURATION;
+
 public class GameView extends View {
+    final int ANIM_DURATION = 400;
     OnCustomListener mListener;
 
     int countX = 0;
@@ -85,11 +92,9 @@ public class GameView extends View {
                         break;
                     } else {
                         verticalFlag = false;
+                    }
                 }
             }
-
-
-        }
 
 /*                reward.clear();
 
@@ -134,77 +139,110 @@ public class GameView extends View {
 
                 break;
             }*/
-        case MotionEvent.ACTION_UP: {
-            Bitmap buff;
-            nextXPos = (int) (event.getX() / CELL_SIZE);
-            nextYPos = (int) (event.getY() / CELL_SIZE);
-            reward.clear();
+            case MotionEvent.ACTION_UP: {
+                nextXPos = (int) (event.getX() / CELL_SIZE);
+                nextYPos = (int) (event.getY() / CELL_SIZE);
+                reward.clear();
 
-            // Left to Right event
-            if (selectedCellX < nextXPos) {
+                // Left to Right event
+                if (selectedCellX < nextXPos) {
 
-                float buff1 = gameset[selectedCellY][selectedCellX + 1].startX;
-                float buff2 = gameset[selectedCellY][selectedCellX].startX;
-//                    for (int i = 0; i < 10000000; i++){
-//                        gameset[selectedCellY][selectedCellX + 1].startX -= CELL_SIZE/10000000;
-//                        gameset[selectedCellY][selectedCellX].startX += CELL_SIZE/10000000;
-//                        invalidate();
-//                    }
-                gameset[selectedCellY][selectedCellX + 1].startX = buff1;
-                gameset[selectedCellY][selectedCellX].startX = buff2;
+                    animX(selectedCellX,selectedCellX + 1,true);
+                    Log.d("GameViewTouchEvent", "Left to Right");
+                    break;
+                }
 
+                // Right to Left event
+                if (selectedCellX > nextXPos) {
 
-                buff = gameset[selectedCellY][selectedCellX + 1].bitmap;
-                gameset[selectedCellY][selectedCellX + 1].bitmap = gameset[selectedCellY][selectedCellX].bitmap;
-                gameset[selectedCellY][selectedCellX].bitmap = buff;
+                    animX(selectedCellX, selectedCellX - 1,true);
+                    Log.d("GameViewTouchEvent", "Right to Left");
+                    break;
+                }
 
-                invalidate();
-                Log.d("GameViewTouchEvent", "Left to Right");
-                checkCombo(selectedCellX, selectedCellY, selectedCellX + 1, selectedCellY);
+                // UP to Down event
+                if (selectedCellY < nextYPos) {
+
+                    animY(selectedCellY, selectedCellY + 1,true);
+                    Log.d("GameViewTouchEvent", "UP to Down");
+                    break;
+                }
+
+                // Down to UP event
+                if (selectedCellY > nextYPos) {
+
+                    animY(selectedCellY,selectedCellY - 1,true);
+                    Log.d("GameViewTouchEvent", "Down to UP");
+                    break;
+                }
                 break;
             }
-
-            // Right to Left event
-            if (selectedCellX > nextXPos) {
-                buff = gameset[selectedCellY][selectedCellX - 1].bitmap;
-                gameset[selectedCellY][selectedCellX - 1].bitmap = gameset[selectedCellY][selectedCellX].bitmap;
-                gameset[selectedCellY][selectedCellX].bitmap = buff;
-
-                invalidate();
-                Log.d("GameViewTouchEvent", "Right to Left");
-                checkCombo(selectedCellX, selectedCellY, selectedCellX - 1, selectedCellY);
-                break;
-            }
-
-            // UP to Down event
-            if (selectedCellY < nextYPos) {
-                buff = gameset[selectedCellY + 1][selectedCellX].bitmap;
-                gameset[selectedCellY + 1][selectedCellX].bitmap = gameset[selectedCellY][selectedCellX].bitmap;
-                gameset[selectedCellY][selectedCellX].bitmap = buff;
-
-                invalidate();
-                Log.d("GameViewTouchEvent", "UP to Down");
-                checkCombo(selectedCellX, selectedCellY, selectedCellX, selectedCellY + 1);
-                break;
-            }
-
-            // Down to UP event
-            if (selectedCellY > nextYPos) {
-                buff = gameset[selectedCellY - 1][selectedCellX].bitmap;
-                gameset[selectedCellY - 1][selectedCellX].bitmap = gameset[selectedCellY][selectedCellX].bitmap;
-                gameset[selectedCellY][selectedCellX].bitmap = buff;
-
-                invalidate();
-                Log.d("GameViewTouchEvent", "Down to UP");
-                checkCombo(selectedCellX, selectedCellY, selectedCellX, selectedCellY - 1);
-                break;
-            }
-            break;
         }
-    }
 
         return true;
-}
+    }
+
+    private void animY(final int fY, final int sY, final boolean check){
+        final float buff1 = gameset[sY][selectedCellX].startY;
+        final float buff2 = gameset[fY][selectedCellX].startY;
+
+        ValueAnimator animatorY = ValueAnimator.ofFloat(buff1, buff2);
+        animatorY.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                gameset[sY][selectedCellX].startY = (float) animation.getAnimatedValue();
+                gameset[fY][selectedCellX].startY = buff1 - ((float)animation.getAnimatedValue() - buff2);
+                invalidate();
+            }
+        });
+        animatorY.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                gameset[sY][selectedCellX].startY = buff1;
+                gameset[fY][selectedCellX].startY = buff2;
+
+                Bitmap buff = gameset[sY][selectedCellX].bitmap;
+                gameset[sY][selectedCellX].bitmap = gameset[fY][selectedCellX].bitmap;
+                gameset[fY][selectedCellX].bitmap = buff;
+
+                if(check){
+                    checkCombo(selectedCellX, fY, selectedCellX , sY);
+                }
+            }
+        });
+        animatorY.setDuration(ANIM_DURATION).start();
+    }
+
+    private void animX(final int fX, final int sX, final boolean check){
+        final float buff1 = gameset[selectedCellY][sX].startX;
+        final float buff2 = gameset[selectedCellY][fX].startX;
+
+        ValueAnimator animatorX = ValueAnimator.ofFloat(buff1, buff2);
+        animatorX.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                gameset[selectedCellY][sX].startX = (float) animation.getAnimatedValue();
+                gameset[selectedCellY][fX].startX = buff1 - ((float)animation.getAnimatedValue() - buff2);
+                invalidate();
+            }
+        });
+        animatorX.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                gameset[selectedCellY][sX].startX = buff1;
+                gameset[selectedCellY][fX].startX = buff2;
+
+                Bitmap buff = gameset[selectedCellY][sX].bitmap;
+                gameset[selectedCellY][sX].bitmap = gameset[selectedCellY][fX].bitmap;
+                gameset[selectedCellY][fX].bitmap = buff;
+
+                if (check){
+                    checkCombo(fX, selectedCellY, sX, selectedCellY);
+                }
+            }
+        });
+        animatorX.setDuration(ANIM_DURATION).start();
+    }
 
     public GameView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
@@ -243,6 +281,73 @@ public class GameView extends View {
         }
 
 
+        if (gameset == null) {
+            generateGameSet();
+        }
+    }
+
+    @Override
+    protected void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
+
+        Log.i("TESTmove", "draw" + countX);
+
+        //draw chess board
+        float startX = 0;
+        float startY = 0;
+        for (int i = 0; i < countY; i++, startX = 0, startY += CELL_SIZE) {
+            for (int j = 0; j < countX; j++, startX += CELL_SIZE) {
+
+                if ((i + j) % 2 == 0) {
+                    canvas.drawRect(startX, startY, startX + CELL_SIZE, startY + CELL_SIZE, lightCellPaint);
+                } else {
+                    canvas.drawRect(startX, startY, startX + CELL_SIZE, startY + CELL_SIZE, darkCellPaint);
+                }
+            }
+        }
+
+        //Picks up coins
+        startY = 0;
+        startX = 0;
+        Bitmap coin = ((BitmapDrawable) getResources().getDrawable(R.drawable.icn_coin_sm)).getBitmap();
+        for (int i = 0; i < countY; i++, startX = 0, startY += CELL_SIZE) {
+            for (int j = 0; j < countX; j++, startX += CELL_SIZE) {
+                if (gameset[i][j].bitmap == coin) {
+                    try {
+                        if (gameset[i - 1][j].bitmap != coin) {
+
+                            gameset[i][j].bitmap = gameset[i - 1][j].bitmap;
+                            gameset[i - 1][j].bitmap = coin;
+
+//                            animY(i - 1,i,false);
+                            i = 0;
+                            j = 0;
+                            break;
+                        }
+                    } catch (ArrayIndexOutOfBoundsException ignored) {
+                    }
+                }
+            }
+        }
+
+        //draw fruits
+        startY = 0;
+        startX = 0;
+        for (int i = 0; i < countY; i++, startX = 0, startY += CELL_SIZE) {
+            for (int j = 0; j < countX; j++, startX += CELL_SIZE) {
+                if (gameset[i][j].bitmap == coin) {
+                    int index = (int) (Math.random() * countX);
+                    gameset[i][j].bitmap = prefab[index];
+                }
+
+//                canvas.drawBitmap(gameset[i][j].bitmap, startX + (CELL_SIZE / 2 - gameset[i][j].bitmap.getWidth() / 2), startY + (CELL_SIZE / 2 - gameset[i][j].bitmap.getHeight() / 2), darkCellPaint);
+                canvas.drawBitmap(gameset[i][j].bitmap, gameset[i][j].startX + (CELL_SIZE / 2 - gameset[i][j].bitmap.getWidth() / 2), gameset[i][j].startY + (CELL_SIZE / 2 - gameset[i][j].bitmap.getHeight() / 2), darkCellPaint);
+            }
+        }
+
+    }
+
+    public void generateGameSet() {
         try {
             gameset = new GameUnit[countY][countX];
             float startX = 0;
@@ -263,42 +368,10 @@ public class GameView extends View {
                 startY += CELL_SIZE;
             }
 
+            invalidate();
         } catch (NegativeArraySizeException ignored) {
         } catch (NullPointerException ignored) {
         }
-    }
-
-    @Override
-    protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
-
-        float startX = 0;
-        float startY = 0;
-
-        //draw chess board
-        for (int i = 0; i < countY; i++, startX = 0, startY += CELL_SIZE) {
-            for (int j = 0; j < countX; j++, startX += CELL_SIZE) {
-
-                if ((i + j) % 2 == 0) {
-                    canvas.drawRect(startX, startY, startX + CELL_SIZE, startY + CELL_SIZE, lightCellPaint);
-                } else {
-                    canvas.drawRect(startX, startY, startX + CELL_SIZE, startY + CELL_SIZE, darkCellPaint);
-                }
-            }
-        }
-        startY = 0;
-        startX = 0;
-
-        //draw fruits
-        for (int i = 0; i < countY; i++, startX = 0, startY += CELL_SIZE) {
-            for (int j = 0; j < countX; j++, startX += CELL_SIZE) {
-
-//                canvas.drawBitmap(gameset[i][j].bitmap, startX + (CELL_SIZE / 2 - gameset[i][j].bitmap.getWidth() / 2), startY + (CELL_SIZE / 2 - gameset[i][j].bitmap.getHeight() / 2), darkCellPaint);
-                Log.d("TESTinv", "draw");
-                canvas.drawBitmap(gameset[i][j].bitmap, gameset[i][j].startX + (CELL_SIZE / 2 - gameset[i][j].bitmap.getWidth() / 2), gameset[i][j].startY + (CELL_SIZE / 2 - gameset[i][j].bitmap.getHeight() / 2), darkCellPaint);
-            }
-        }
-
     }
 
     private void checkCombo(int firstX, int firstY, int secondX, int secondY) {
@@ -431,10 +504,12 @@ public class GameView extends View {
     }
 
     private void removeLife(int firstX, int firstY, int secondX, int secondY) {
-        Bitmap buff;
-        buff = gameset[firstY][firstX].bitmap;
-        gameset[firstY][firstX].bitmap = gameset[secondY][secondX].bitmap;
-        gameset[secondY][secondX].bitmap = buff;
+
+        if (secondX==firstX){
+            animY(secondY,firstY,false);
+        } else {
+            animX(secondX,firstX,false);
+        }
 
         if (mListener != null)
             mListener.removeLife();
@@ -450,15 +525,15 @@ public class GameView extends View {
     }
 
 
-private class GameUnit {
-    public Bitmap bitmap;
-    public float startX;
-    public float startY;
-}
+    private class GameUnit {
+        public Bitmap bitmap;
+        public float startX;
+        public float startY;
+    }
 
-public interface OnCustomListener {
-    void saveReward(int coins);
+    public interface OnCustomListener {
+        void saveReward(int coins);
 
-    void removeLife();
-}
+        void removeLife();
+    }
 }

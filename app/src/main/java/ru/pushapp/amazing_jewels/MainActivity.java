@@ -23,7 +23,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         externalLifeTV = findViewById(R.id.count_life);
 
         bottomBtn = findViewById(R.id.bottom_btn_bg);
-
     }
 
     @Override
@@ -61,7 +60,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         SharedPreferences sharedPreferences = getSharedPreferences("local", Context.MODE_MULTI_PROCESS);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putInt("money", 10000);
-        editor.putInt("life", 2);
+        editor.putInt("life", 5);
         editor.apply();
     }
 }

@@ -6,17 +6,22 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.Toast;
 
-public class GameFragment extends Fragment implements GameView.OnCustomListener{
+public class GameFragment extends Fragment implements GameView.OnCustomListener, PauseFragment.OnResultListener{
 
     GameView gameView;
 
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
+
+    FrameLayout frame;
 
     @Nullable
     @Override
@@ -28,6 +33,8 @@ public class GameFragment extends Fragment implements GameView.OnCustomListener{
 
         sharedPreferences = getContext().getSharedPreferences("local", Context.MODE_MULTI_PROCESS);
         editor = sharedPreferences.edit();
+
+        frame = view.findViewById(R.id.pause_frame);
 
         return view;
     }
@@ -46,5 +53,31 @@ public class GameFragment extends Fragment implements GameView.OnCustomListener{
 
         editor.putInt("life", --externalLife);
         editor.apply();
+
+        if (externalLife <= 0){
+            PauseFragment pauseFragment = new PauseFragment();
+            pauseFragment.setOnResultListener(this);
+
+            Bundle bundle = new Bundle();
+            bundle.putString("label", "Play Again");
+            pauseFragment.setArguments(bundle);
+
+            frame.setVisibility(View.VISIBLE);
+            FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.pause_frame, pauseFragment);
+            fragmentTransaction.commitNow();
+        }
     }
+
+    @Override
+    public void playAgain() {
+        editor.putInt("life", 5);
+        editor.apply();
+
+        gameView.generateGameSet();
+
+        frame.setVisibility(View.GONE);
+        Toast.makeText(getContext(), "playAgain", Toast.LENGTH_SHORT).show();
+    }
+
 }
