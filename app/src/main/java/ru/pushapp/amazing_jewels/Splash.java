@@ -8,7 +8,6 @@ import android.support.annotation.Nullable;
 import android.support.graphics.drawable.Animatable2Compat;
 import android.support.graphics.drawable.AnimatedVectorDrawableCompat;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,8 +26,8 @@ public class Splash extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.splash_fragment, container, false);
 
-
         animImage = view.findViewById(R.id.splash_anim);
+
         return view;
     }
 
@@ -42,7 +41,6 @@ public class Splash extends Fragment {
             @Override
             public void onAnimationEnd(Drawable drawable) {
                 super.onAnimationEnd(drawable);
-                Log.i("TESTanim","end");
                 Navigation.findNavController(animImage).navigate(R.id.action_splash_to_startFragment);
             }
         });
@@ -55,7 +53,6 @@ public class Splash extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        Log.i("TESTanim", "pause");
         avd.clearAnimationCallbacks();
         animatable.stop();
     }
