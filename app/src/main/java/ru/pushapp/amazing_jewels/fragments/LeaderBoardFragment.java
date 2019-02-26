@@ -1,4 +1,4 @@
-package ru.pushapp.amazing_jewels;
+package ru.pushapp.amazing_jewels.fragments;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -21,6 +21,9 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 import androidx.navigation.Navigation;
+import ru.pushapp.amazing_jewels.model.LeaderUnit;
+import ru.pushapp.amazing_jewels.R;
+import ru.pushapp.amazing_jewels.model.RecyclerViewAdapter;
 
 public class LeaderBoardFragment extends Fragment implements View.OnClickListener, SharedPreferences.OnSharedPreferenceChangeListener {
 

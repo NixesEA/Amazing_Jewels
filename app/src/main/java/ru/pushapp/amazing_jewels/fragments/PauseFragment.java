@@ -1,4 +1,4 @@
-package ru.pushapp.amazing_jewels;
+package ru.pushapp.amazing_jewels.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -11,6 +11,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.navigation.Navigation;
+import ru.pushapp.amazing_jewels.R;
 
 public class PauseFragment extends Fragment implements View.OnClickListener{
 

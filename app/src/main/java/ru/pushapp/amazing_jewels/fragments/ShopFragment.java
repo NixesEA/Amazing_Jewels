@@ -1,4 +1,4 @@
-package ru.pushapp.amazing_jewels;
+package ru.pushapp.amazing_jewels.fragments;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -13,6 +13,8 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import ru.pushapp.amazing_jewels.R;
 
 public class ShopFragment extends Fragment implements View.OnClickListener,SharedPreferences.OnSharedPreferenceChangeListener {
     Button buy;

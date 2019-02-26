@@ -1,4 +1,4 @@
-package ru.pushapp.amazing_jewels;
+package ru.pushapp.amazing_jewels.fragments;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -19,6 +19,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import androidx.navigation.Navigation;
+import ru.pushapp.amazing_jewels.R;
 
 public class LoginFragment extends Fragment implements  View.OnClickListener, View.OnFocusChangeListener{
 

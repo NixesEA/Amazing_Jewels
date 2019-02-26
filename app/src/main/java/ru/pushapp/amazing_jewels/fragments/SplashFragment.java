@@ -1,4 +1,4 @@
-package ru.pushapp.amazing_jewels;
+package ru.pushapp.amazing_jewels.fragments;
 
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
@@ -14,8 +14,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import androidx.navigation.Navigation;
+import ru.pushapp.amazing_jewels.R;
 
-public class Splash extends Fragment {
+public class SplashFragment extends Fragment {
 
     ImageView animImage;
     AnimatedVectorDrawableCompat avd;

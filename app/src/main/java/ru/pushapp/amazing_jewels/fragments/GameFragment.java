@@ -1,4 +1,4 @@
-package ru.pushapp.amazing_jewels;
+package ru.pushapp.amazing_jewels.fragments;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -20,6 +20,10 @@ import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
+
+import ru.pushapp.amazing_jewels.GameView;
+import ru.pushapp.amazing_jewels.model.LeaderUnit;
+import ru.pushapp.amazing_jewels.R;
 
 public class GameFragment extends Fragment implements GameView.OnCustomListener, PauseFragment.OnResultListener, View.OnClickListener,SharedPreferences.OnSharedPreferenceChangeListener{
 
