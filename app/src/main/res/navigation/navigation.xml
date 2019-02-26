@@ -11,15 +11,15 @@
         android:label="login_fragment"
         tools:layout="@layout/login_fragment" >
         <action
-            android:id="@+id/action_loginFragment_to_startFragment"
-            app:destination="@id/startFragment" />
-        <action
             android:id="@+id/action_loginFragment_to_loginFragment2"
             app:exitAnim="@anim/center_to_left"
             app:enterAnim="@anim/right_to_center"
             app:popExitAnim="@anim/center_to_right"
             app:popEnterAnim="@anim/left_to_center"
             app:destination="@id/loginFragment2" />
+        <action
+            android:id="@+id/action_loginFragment_to_splash"
+            app:destination="@id/splash" />
     </fragment>
 
     <fragment
@@ -59,6 +59,9 @@
         <action
             android:id="@+id/action_gameFragment_to_shopFragment"
             app:destination="@id/shopFragment" />
+        <action
+            android:id="@+id/action_gameFragment_to_leaderBoardFragment"
+            app:destination="@id/leaderBoardFragment" />
     </fragment>
     <fragment
         android:id="@+id/loginFragment2"
@@ -68,5 +71,14 @@
         <action
             android:id="@+id/action_loginFragment2_to_loginFragment"
             app:destination="@id/loginFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/splash"
+        android:name="ru.pushapp.amazing_jewels.Splash"
+        android:label="splash_fragment"
+        tools:layout="@layout/splash_fragment" >
+        <action
+            android:id="@+id/action_splash_to_startFragment"
+            app:destination="@id/startFragment" />
     </fragment>
 </navigation>

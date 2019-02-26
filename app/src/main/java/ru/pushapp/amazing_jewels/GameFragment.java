@@ -76,7 +76,6 @@ public class GameFragment extends Fragment implements GameView.OnCustomListener,
         SCORE += coins;
         scoreCount.setText(String.valueOf(SCORE));
 
-        saveResult();
         int userBalance = coins + sharedPreferences.getInt("money", 0);
 
         editor.putInt("money", userBalance);
@@ -91,8 +90,15 @@ public class GameFragment extends Fragment implements GameView.OnCustomListener,
         editor.apply();
 
         if (externalLife <= 0){
+            saveResult();
             startPauseFragment(1);
         }
+    }
+
+    @Override
+    public void onPause() {
+        saveResult();
+        super.onPause();
     }
 
     private void saveResult() {

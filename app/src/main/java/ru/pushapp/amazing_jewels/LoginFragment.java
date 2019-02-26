@@ -1,6 +1,5 @@
 package ru.pushapp.amazing_jewels;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -22,7 +21,6 @@ import java.util.regex.Pattern;
 import androidx.navigation.Navigation;
 
 public class LoginFragment extends Fragment implements  View.OnClickListener, View.OnFocusChangeListener{
-
 
     //1 - Log In screen
     //2 - Registration screen
@@ -190,13 +188,13 @@ public class LoginFragment extends Fragment implements  View.OnClickListener, Vi
                         editor.putInt("visibility", View.GONE);
                         editor.apply();
 
-                        Navigation.findNavController(view).navigate(R.id.action_loginFragment_to_startFragment);
+                        Navigation.findNavController(view).navigate(R.id.action_loginFragment_to_splash);
                     } else {
                         Toast.makeText(getContext(), "Ошибка авторизации\nПроверьте введенные логин и пароль", Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     if (saveLogIn()){
-//                        return To Log In Screen
+//                        return To LogIn Screen
                         getActivity().onBackPressed();
                     }
                 }
@@ -206,7 +204,7 @@ public class LoginFragment extends Fragment implements  View.OnClickListener, Vi
                 if (STATE == 1){
                     goToRegistrationScreen(view);
                 } else {
-//                    return To Log In Screen;
+//                    return To LogIn Screen;
                     getActivity().onBackPressed();
                 }
 

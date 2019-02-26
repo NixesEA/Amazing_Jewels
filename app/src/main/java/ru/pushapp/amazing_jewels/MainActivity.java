@@ -8,7 +8,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener, View.OnClickListener{
+public class MainActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener{
 
     ImageView bottomBtn;
 
@@ -43,12 +43,4 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         super.onBackPressed();
     }
 
-    @Override
-    public void onClick(View view) {
-        SharedPreferences sharedPreferences = getSharedPreferences("local", Context.MODE_MULTI_PROCESS);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt("money", 10000);
-        editor.putInt("life", 5);
-        editor.apply();
-    }
 }

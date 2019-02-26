@@ -11,7 +11,6 @@ import android.graphics.Paint;
 import android.graphics.Shader;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.GradientDrawable;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -37,7 +36,6 @@ public class GameView extends View {
     int nextXPos;
     int nextYPos;
 
-    private GradientDrawable mDrawable;
     Paint topDarkGrad = new Paint();
     Paint topLightGrad = new Paint();
 
@@ -189,13 +187,6 @@ public class GameView extends View {
             prefab[i] = b;
         }
 
-        //gradient
-
-        mDrawable = new GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT,
-                new int[]{0xFFFF0000, 0xFF00FF00,
-                        0xFF0000FF});
-        mDrawable.setShape(GradientDrawable.RECTANGLE);
-
         lightCellPaint.setColor(getResources().getColor(R.color.light_cell));
         darkCellPaint.setColor(getResources().getColor(R.color.dark_cell));
     }
@@ -210,7 +201,6 @@ public class GameView extends View {
 
         countY = ((int) (HEIGHT_SCREEN / CELL_SIZE)) - 1;
         countX = (int) (WIDTH_SCREEN / CELL_SIZE);
-
 
         if (gameset == null || gameset.length != countY) {
             generateGameSet();
@@ -241,7 +231,7 @@ public class GameView extends View {
                     if (i == 0) {
                         topDarkGrad.setShader(new LinearGradient(startX + CELL_SIZE / 2, startY, startX + CELL_SIZE / 2, startY + CELL_SIZE, getResources().getColor(R.color.stop_dark_cell), getResources().getColor(R.color.start_dark_cell), Shader.TileMode.MIRROR));
                         canvas.drawRect(startX, startY, startX + CELL_SIZE, startY + CELL_SIZE, topDarkGrad);
-                    } else if(i == countY - 1){
+                    } else if (i == countY - 1) {
                         topDarkGrad.setShader(new LinearGradient(startX + CELL_SIZE / 2, startY, startX + CELL_SIZE / 2, startY + CELL_SIZE, getResources().getColor(R.color.start_dark_cell), getResources().getColor(R.color.stop_dark_cell), Shader.TileMode.MIRROR));
                         canvas.drawRect(startX, startY, startX + CELL_SIZE, startY + CELL_SIZE, topDarkGrad);
                     } else {
@@ -255,9 +245,7 @@ public class GameView extends View {
         startY = 0;
         startX = 0;
         Bitmap coin = ((BitmapDrawable) getResources().getDrawable(R.drawable.icn_coin_sm)).getBitmap();
-        for (
-                int i = 0;
-                i < countY; i++, startX = 0, startY += CELL_SIZE) {
+        for (int i = 0; i < countY; i++, startX = 0, startY += CELL_SIZE) {
             for (int j = 0; j < countX; j++, startX += CELL_SIZE) {
                 if (gameset[i][j].bitmap == coin) {
                     try {
@@ -279,9 +267,7 @@ public class GameView extends View {
         //draw fruits
         startY = 0;
         startX = 0;
-        for (
-                int i = 0;
-                i < countY; i++, startX = 0, startY += CELL_SIZE) {
+        for (int i = 0; i < countY; i++, startX = 0, startY += CELL_SIZE) {
             for (int j = 0; j < countX; j++, startX += CELL_SIZE) {
                 if (gameset[i][j].bitmap == coin) {
                     int index = (int) (Math.random() * countX);
@@ -478,9 +464,9 @@ public class GameView extends View {
 
 
     private class GameUnit {
-        public Bitmap bitmap;
-        public float startX;
-        public float startY;
+        Bitmap bitmap;
+        float startX;
+        float startY;
     }
 
     public interface OnCustomListener {

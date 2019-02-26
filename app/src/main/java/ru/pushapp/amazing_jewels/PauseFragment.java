@@ -30,7 +30,6 @@ public class PauseFragment extends Fragment implements View.OnClickListener{
         View view = inflater.inflate(R.layout.pause_fragment, container, false);
 
         pause = view.findViewById(R.id.pause_txt);
-//        String msg = getArguments().getString("label");
         STATE = getArguments().getInt("statePause");
         if (STATE == 0){
             pause.setText("Pause");
@@ -42,7 +41,7 @@ public class PauseFragment extends Fragment implements View.OnClickListener{
         play.setOnClickListener(this);
 
         leaders = view.findViewById(R.id.leaderboard_btn);
-//        leaders.setOnClickListener(this);
+        leaders.setOnClickListener(this);
 
         shop = view.findViewById(R.id.buy_life_btn);
         shop.setOnClickListener(this);
@@ -62,7 +61,7 @@ public class PauseFragment extends Fragment implements View.OnClickListener{
                 break;
             }
             case R.id.leaderboard_btn:{
-                Navigation.findNavController(view).navigate(R.id.action_startFragment_to_leaderBoardFragment);
+                Navigation.findNavController(view).navigate(R.id.action_gameFragment_to_leaderBoardFragment);
                 break;
             }
             case R.id.buy_life_btn:{
